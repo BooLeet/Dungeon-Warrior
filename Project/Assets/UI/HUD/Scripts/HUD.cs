@@ -7,7 +7,7 @@ public class HUD : MonoBehaviour {
     public Transform hudContainerTransform;
     [Space]
     public GameObject damageIndicatorPrefab;
-    public HUD_Hitmarker hitmarker;
+    public HUD_Hitmarker hitmarker,deathmarker;
 
     public void DamageIndicator(Vector3 damageSource, PlayerCharacter player)
     {

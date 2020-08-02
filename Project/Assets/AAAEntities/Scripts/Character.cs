@@ -22,12 +22,13 @@ public abstract class Character : Entity {
     private float manualMovementMagnitude = 0;
     private readonly float manualMovementMagnitudeLerp = 10;
 
+    public CharacterInventory inventory;
 
     void Start()
     {
         navAgent.enabled = false;
         path = new NavMeshPath();
-
+        inventory = new CharacterInventory();
         ControllerStart();
     }
 
@@ -234,7 +235,7 @@ public abstract class Character : Entity {
 
     public abstract Vector3 GetAttackDirection(float spreadAngleDeg);
 
-    public virtual void DamageFeedback(Entity damagedEntity) { }
+    public virtual void DamageFeedback(Entity damagedEntity,DamageOutcome damageOutcome) { }
 
     #endregion
 

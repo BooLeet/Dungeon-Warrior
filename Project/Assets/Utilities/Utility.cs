@@ -17,11 +17,11 @@ public static class Utility{
         return Vector3.Distance(pivotDirection, (objectPosition - pivotPosition).normalized) < directionalDistance;
     }
 
-    public static bool IsVisible(Vector3 from, GameObject obj, float maxDistance, float verticalOffset = 0)
+    public static bool IsVisible(Vector3 from, GameObject obj, float maxDistance, float verticalOffset = 0, int layerMask = int.MaxValue)
     {
         Ray ray = new Ray(from, obj.transform.position + Vector3.up * verticalOffset - from);
         RaycastHit hit;
-        if(Physics.Raycast(ray,out hit, maxDistance))
+        if(Physics.Raycast(ray,out hit, maxDistance,layerMask))
         {
             if (obj == hit.collider.gameObject)
                 return true;
@@ -56,7 +56,7 @@ public static class Utility{
 
     public static float AngleBetweenTwoVectors(Vector3 lhs,Vector3 rhs)
     {
-        float angle = Mathf.Acos(Vector3.Dot(lhs, rhs)) / (lhs.magnitude * rhs.magnitude);
+        float angle = Mathf.Acos(Mathf.Clamp(Vector3.Dot(lhs, rhs) / (lhs.magnitude * rhs.magnitude), -1, 1));
         return angle;
     }
 }

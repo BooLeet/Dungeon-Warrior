@@ -4,52 +4,43 @@ using UnityEngine;
 
 public class KeyboardInput : PlayerInput {
     public string attackKey = "mouse 0";
-    public string zoomKey = "mouse 1";
+    public string specialAttackKey = "mouse 1";
     public string interactKey = "e";
     public string dashKey = "left shift";
-    public string jumpKey = "space";
-    public string meleeKey = "e";
+    public string forcePushKey = "c";
     [Space]
     public string moveHorizontalAxis = "Horizontal";
     public string moveVerticalAxis = "Vertical";
     [Space]
     public string cameraHorizontalAxis = "Mouse X";
     public string cameraVerticalAxis = "Mouse Y";
-    private float keyPressValidTime = 0.1f;
-    private float jumpTimeCounter, interactTimeCounter, meleeTimeCounter;
+    public float keyPressValidTime = 0.1f;
+    private float attackTimeCounter, interactTimeCounter, forcePushTimeCounter;
 
     void Update()
     {
-        Attack = Input.GetKey(attackKey);
-        Zoom = Input.GetKey(zoomKey);
-
-        if (Input.GetKeyUp(interactKey))
-            interactTimeCounter = keyPressValidTime;
-        if (Input.GetKey(jumpKey))
-            jumpTimeCounter = keyPressValidTime;
-        if (Input.GetKey(meleeKey))
-            meleeTimeCounter = keyPressValidTime;
-
-        Interact = interactTimeCounter > 0;
-        Jump = jumpTimeCounter > 0;
-        Melee = meleeTimeCounter > 0;
-        Dash = Input.GetKeyDown(dashKey);
-        
+        StickyInput(ref attackTimeCounter, ref attack, Input.GetKeyDown(attackKey));
+        StickyInput(ref forcePushTimeCounter, ref forcePush, Input.GetKeyDown(forcePushKey));
+        interact = Input.GetKeyUp(interactKey);
+        dash = Input.GetKeyDown(dashKey);
+        specialAttack = Input.GetKey(specialAttackKey);
 
         MoveInput = new Vector2(Input.GetAxisRaw(moveHorizontalAxis), Input.GetAxisRaw(moveVerticalAxis));
         if (MoveInput.magnitude > 1)
             MoveInput = MoveInput.normalized;
         CameraInput = new Vector2(Input.GetAxisRaw(cameraHorizontalAxis), Input.GetAxisRaw(cameraVerticalAxis));
-        
-        // Time counting
-        interactTimeCounter -= Time.deltaTime;
-        jumpTimeCounter -= Time.deltaTime;
-        meleeTimeCounter -= Time.deltaTime;
+    }
 
-        if (interactTimeCounter < 0)
-            interactTimeCounter = 0;
-        if (jumpTimeCounter < 0)
-            jumpTimeCounter = 0;
+    private void StickyInput(ref float timeCounter, ref bool boolToStick, bool input)
+    {
+        if (input)
+            timeCounter = keyPressValidTime;
+
+        boolToStick = timeCounter > 0;
+
+        timeCounter -= Time.deltaTime;
+        if (timeCounter < 0)
+            timeCounter = 0;
     }
 
 }

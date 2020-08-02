@@ -11,6 +11,7 @@ public abstract class CharacterAnimator : MonoBehaviour
         public string[] attackTriggers;
         public float attackDamageDelay;
         public float attackDuration;
+        public float attackAnimationDuration;
         public Transform damageSource;
         public GameObject attackEffectPrefab;
     }
@@ -19,6 +20,10 @@ public abstract class CharacterAnimator : MonoBehaviour
 
     public string idleTrigger = "Idle", walkTrigger = "Walk";
     private bool wasWalking = false;
+    public GameObject damageEffectPrefab;
+    public Transform damageEffectSource;
+
+    public AudioClip footStepSound;
 
     // Handles walking animation
     public void WalkingAnimation(bool isWalking)
@@ -45,7 +50,7 @@ public abstract class CharacterAnimator : MonoBehaviour
     }
 
     // Plays the idle animation
-    public void Idle()
+    protected void Idle()
     {
         animator.SetTrigger(idleTrigger);
     }
@@ -60,5 +65,16 @@ public abstract class CharacterAnimator : MonoBehaviour
     protected void PlayAttackSound(AttackAnimationInfo attackAnimationInfo, float spacialBlend = 0.66f)
     {
         Utility.PlayAudioClipAtPoint(attackAnimationInfo.attackSound, attackAnimationInfo.damageSource.position, attackAnimationInfo.damageSource, spacialBlend);
+    }
+
+    public void PlayFootstepSound()
+    {
+        Utility.PlayAudioClipAtPoint(footStepSound, transform.position, transform, 1);
+    }
+
+    public void PlayDamageEffect()
+    {
+        if (damageEffectPrefab)
+            Instantiate(damageEffectPrefab, damageEffectSource.position, damageEffectSource.rotation);
     }
 }

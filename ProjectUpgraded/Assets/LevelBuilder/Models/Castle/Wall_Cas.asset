@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3186c45c429fd6c4ba9b9a4e73a402bb, type: 3}
+  m_Name: Wall_Cas
+  m_EditorClassIdentifier: 
+  mapColor: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
+  prefabs:
+  - {fileID: 1074888591142230, guid: 2115d028c15328842a66a9dde8184103, type: 2}
+  optionalPrefabs: []
+  type: 1

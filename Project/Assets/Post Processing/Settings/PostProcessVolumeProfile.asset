@@ -19,6 +19,7 @@ MonoBehaviour:
   - {fileID: 114361846947082198}
   - {fileID: 114207002767705608}
   - {fileID: 114274729425879296}
+  - {fileID: 114094949097648952}
 --- !u!114 &114062315097659046
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -35,11 +36,11 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   shutterAngle:
-    overrideState: 0
-    value: 270
+    overrideState: 1
+    value: 360
   sampleCount:
-    overrideState: 0
-    value: 10
+    overrideState: 1
+    value: 32
 --- !u!114 &114065399647409342
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -316,6 +317,33 @@ MonoBehaviour:
       m_Loop: 0
       m_ZeroValue: 0.5
       m_Range: 1
+--- !u!114 &114094949097648952
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65e486e4de6e5448a8fbb43dc8756a0, type: 3}
+  m_Name: Grain
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  colored:
+    overrideState: 0
+    value: 1
+  intensity:
+    overrideState: 1
+    value: 0.15
+  size:
+    overrideState: 0
+    value: 1
+  lumContrib:
+    overrideState: 0
+    value: 0.8
 --- !u!114 &114207002767705608
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -363,7 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
   m_Name: ChromaticAberration
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1

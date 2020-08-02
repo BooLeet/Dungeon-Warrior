@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a4c6ba0c7101284e866d934b88df7da, type: 3}
+  m_Name: ResearchCenter
+  m_EditorClassIdentifier: 
+  pieces:
+  - {fileID: 11400000, guid: 0721edf4ced2f224aad426d58687150a, type: 2}
+  - {fileID: 11400000, guid: 04111567fedd0bd42894687585c30a82, type: 2}
+  - {fileID: 11400000, guid: 7233f39178bf8e44bab13079af241388, type: 2}
+  - {fileID: 11400000, guid: 3987ac7b64300eb43b7fb93bf06256ed, type: 2}
+  - {fileID: 11400000, guid: 432e342f441687a4884027181300a0c4, type: 2}

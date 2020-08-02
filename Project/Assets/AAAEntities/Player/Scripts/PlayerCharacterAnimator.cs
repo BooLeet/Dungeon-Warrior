@@ -5,45 +5,35 @@ using UnityEngine;
 public class PlayerCharacterAnimator : CharacterAnimator
 {
     [Header("Attack")]
-    public AttackAnimationInfo rangeAttack;
     public AttackAnimationInfo meleeAttack;
-
-    [Header("Melee Leap")]
-    public string leapStartTrigger = "LeapStart";
-    public string leapEndTrigger = "LeapEnd";
-    public float leapLandingDuration;
-    public AudioClip leapLandSound;
-    [Space]
-    public Transform leapExplosionDamageSource;
-    public GameObject leapLandExplosionPrefab;
-
-    private int rangeAttackTriggerIndex = 0;
     private int meleeAttackTriggerIndex = 0;
+
+    [Header("Sting Attack")]
+    public string stingStartTrigger = "StingStart";
+    public float stingStartAnimationDuration;
+    public AttackAnimationInfo stingEndAnimation;
+
+    [Header("Spin Attack")]
+    public string spinStartTrigger = "SpinStart";
+    public string spinEndTrigger = "SpinEnd";
+    public float spinStartAnimationDuration;
+    public float spinEndAnimationDuration;
+
     [Header("Dash")]
-    public Transform dashEffectSource;
-    public GameObject dashMovementEffect;
-    public GameObject dashEndEffect;
     public AudioClip dashSound;
 
-    // Plays the range attack animation
-    public void RangeAttack()
-    {
-        animator.SetTrigger(rangeAttack.attackTriggers[rangeAttackTriggerIndex++]);
-        rangeAttackTriggerIndex %= rangeAttack.attackTriggers.Length;
-    }
+    [Header("Force Push")]
+    public AttackAnimationInfo forcePush;
 
+    [Header("Force Pull")]
+    public AttackAnimationInfo forcePull;
+
+    #region Regular Melee Attack
     // Plays the melee attack animation
     public void MeleeAttack()
     {
         animator.SetTrigger(meleeAttack.attackTriggers[meleeAttackTriggerIndex++]);
         meleeAttackTriggerIndex %= meleeAttack.attackTriggers.Length;
-    }
-    
-
-    // Plays the range attack sound
-    public void PlayRangeAttackSound()
-    {
-        PlayAttackSound(rangeAttack);
     }
 
     // Plays the melee attack sound
@@ -51,30 +41,39 @@ public class PlayerCharacterAnimator : CharacterAnimator
     {
         PlayAttackSound(meleeAttack);
     }
+    #endregion
 
-    #region Leap
-    // Plays leap start animation
-    public void LeapStart()
+    #region Sting
+    // Plays the sting start animation
+    public void StingAttackStart()
     {
-        animator.SetTrigger(leapStartTrigger);
+        animator.SetTrigger(stingStartTrigger);
     }
 
-    // Plays leap end animation
-    public void LeapEnd()
+    // Plays the sting end animation
+    public void StingAttackEnd()
     {
-        animator.SetTrigger(leapEndTrigger);
+        animator.SetTrigger(stingEndAnimation.attackTriggers[0]);
     }
 
-    // Play leap explosion effect
-    public void PlayLeapExplosion()
+    // Plays the sting attack sound
+    public void PlayStingAttackSound()
     {
-        Instantiate(leapLandExplosionPrefab, leapExplosionDamageSource.position, Quaternion.identity);
+        PlayAttackSound(stingEndAnimation);
+    }
+    #endregion
+
+    #region Spin
+    // Plays the spin start animation
+    public void SpinAttackStart()
+    {
+        animator.SetTrigger(spinStartTrigger);
     }
 
-    // Plays the leap landing sound
-    public void PlayLeapLandSound(float spacialBlend = 0.66f)
+    // Plays the spin end animation
+    public void SpinAttackEnd()
     {
-        Utility.PlayAudioClipAtPoint(leapLandSound, transform.position, null, spacialBlend);
+        animator.SetTrigger(spinEndTrigger);
     }
     #endregion
 
@@ -83,22 +82,39 @@ public class PlayerCharacterAnimator : CharacterAnimator
     {
         Utility.PlayAudioClipAtPoint(dashSound, transform.position, transform, spacialBlend);
     }
-
-    public void PlayDashMovementEffect(Vector3 dashDirection,float duration)
-    {
-        Instantiate(dashMovementEffect, dashEffectSource.position + dashDirection, Quaternion.LookRotation(dashDirection),dashEffectSource).AddComponent<DestroyOnTime>().delay = duration;
-    }
-
-    public void PlayDashEndEffect(Vector3 position, Vector3 dashDirection)
-    {
-        Instantiate(dashEndEffect, position, Quaternion.LookRotation(dashDirection));
-    }
     #endregion
 
-    public void PlayRangeAttackEffect()
+    #region ForcePush
+
+    // Plays the force push animation
+    public void ForcePush()
     {
-        PlayAttackEffect(rangeAttack);
+        animator.SetTrigger(forcePush.attackTriggers[0]);
     }
+
+    // Plays the force push sound
+    public void PlayForcePushSound()
+    {
+        PlayAttackSound(forcePush);
+    }
+
+    #endregion
+
+    #region ForcePull
+
+    // Plays the force pull animation
+    public void ForcePull()
+    {
+        animator.SetTrigger(forcePull.attackTriggers[0]);
+    }
+
+    // Plays the force pull sound
+    public void PlayForcePullSound()
+    {
+        PlayAttackSound(forcePull);
+    }
+
+    #endregion
 
     private void PlayAttackEffect(AttackAnimationInfo attackAnimationInfo)
     {

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdbad2fbce79da4fbd248c9fd51823e, type: 3}
+  m_Name: PlayerRevolver
+  m_EditorClassIdentifier: 
+  numberOfProjectiles: 1
+  spreadAngle: 0
+  info:
+    name: Projectile
+    radius: 0.1
+    speed: 150
+    lifeTime: 1
+    maxPenetrations: 3
+    onHit:
+      onHitFunctors: []
+    model: {fileID: 1664740601458906, guid: adccb885e4768ce479568ef2323cd4e0, type: 3}
+    hitEffect: {fileID: 1706171305083330, guid: f6f438978ef624f4495335ecb9512aae,
+      type: 3}

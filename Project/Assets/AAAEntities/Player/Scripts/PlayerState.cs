@@ -13,57 +13,32 @@ namespace PlayerFSM
         public abstract PlayerState Transition(PlayerCharacter player);
     }
 
-    public class FreeWalkState : PlayerState
+    #region Movement States
+    public class DirectMovementState : PlayerState
     {
         public override void Action(PlayerCharacter player)
         {
-            player.ManualMovement(player.input.MoveInput, player.playerCamera.CameraForward, player.playerCamera.CameraRight, 0.5f);
-            player.ManualRotation(player.input.CameraInput);
+            player.ManualMovement(player.input.MoveInput, player.transform.forward, player.transform.right, 0.5f);
             player.Gravity();
-            player.ZoomAbilityUpdate(player.input.Zoom);
-            player.ApplyMovement();//(zoomAbilityInUse && ZoomAbilityMeter > 0) ? zoomAbilityMotionMultiplier : 1);
+            player.ApplyMovement();
 
-            if (player.input.MoveInput.magnitude > 0 && player.CanAttack && player.IsNearGround() && !player.ZoomAbilityInUse)
-                player.FaceWalkingDirection(player.input.MoveInput);
-            else if (player.ZoomAbilityInUse)
-                player.FaceCameraDirection();
-
-            if (player.CanAttack)
+            if (player.AttackAnimationFinished && player.CanAttack)
                 player.animator.WalkingAnimation(player.CanAttack && player.input.MoveInput.magnitude > 0 && player.IsNearGround());
 
-            if (player.input.Jump)
-                player.Jump();
-
-            if (player.input.Attack)
-                player.RangeAttack();
+            //if (player.input.Attack)
+            //    player.MeleeAttack();
         }
 
         public override void Init(PlayerCharacter player)
         {
-            
+
         }
 
         public override PlayerState Transition(PlayerCharacter player)
         {
             if (player.input.Dash && player.DashMeter >= 1)
-                return ReturnState(player, new DashState());
-            if (player.input.Melee)
-            {
-                if (player.CanAttack && !player.IsNearGround() && player.playerCamera.angleV >= player.leapCameraAngleThreshold)
-                    return ReturnState(player, new LeapState());
-                else
-                    player.MeleeAttack();
-            }
-
+                return new DashState();
             return null;
-        }
-
-        private PlayerState ReturnState(PlayerCharacter player,PlayerState state)
-        {
-            player.ZoomAbilityInUse = false;
-            player.playerCamera.SetZoom(false);
-            Time.timeScale = 1;
-            return state;
         }
     }
 
@@ -90,20 +65,16 @@ namespace PlayerFSM
                 moveInput = new Vector2(0, 1);
             else
                 moveInput.Normalize();
-            player.FaceWalkingDirectionImediate(moveInput);
 
             moveInput.Normalize();
-            player.RedirectInertia(moveInput, player.playerCamera.CameraForward, player.playerCamera.CameraRight);
-            Vector3 forward = player.playerCamera.transform.forward;
-            if (player.playerCamera.angleV > player.dashInversionMinAngle && moveInput.y > 0)
-                forward *= -1;
-            dashDirection = forward * moveInput.y + player.playerCamera.transform.right * moveInput.x;
+            player.RedirectInertia(moveInput, player.transform.forward, player.transform.right);
+            Vector3 forward = player.transform.forward;
+            dashDirection = forward * moveInput.y + player.transform.right * moveInput.x;
 
             PlayerCamera.Recoil(20);
             PlayerCamera.ScreenShake(player.dashDuration);
 
             player.animator.PlayDashSound();
-            player.animator.PlayDashMovementEffect(dashDirection, player.dashDuration);
         }
 
         public override PlayerState Transition(PlayerCharacter player)
@@ -112,71 +83,146 @@ namespace PlayerFSM
                 return null;
             PlayerCamera.Recoil();
             PlayerCamera.ScreenShake(0.2f);
-            player.animator.PlayDashEndEffect(player.Position, dashDirection);
-            return new FreeWalkState();
+            return new DirectMovementState();
         }
     }
 
-    public class LeapState : PlayerState
-    {
-        private float currentLeapSpeed = 0;
-        private Vector3 movementVector;
+    #endregion
 
+    #region Combat States
+
+    public class BasicAttackState : PlayerState
+    {
         public override void Action(PlayerCharacter player)
         {
             player.ManualRotation(player.input.CameraInput);
-            currentLeapSpeed = Mathf.Lerp(currentLeapSpeed, player.leapSpeed, Time.deltaTime);
-            player.NonInertialMovement(movementVector * currentLeapSpeed);
-            player.ApplyMovement();
+
+            if (player.input.Interact && player.CanAttack)
+                player.Interact();
+
+            if (player.input.Attack)
+                player.MeleeAttack();
+
+            if (player.input.ForcePush)
+                player.ForcePush();
         }
 
         public override void Init(PlayerCharacter player)
         {
-            player.ResetInertia();
-            player.animator.LeapStart();
-            player.FaceCameraDirection();
-            float angle = -player.playerCamera.angleV;
-            movementVector = player.transform.forward * Mathf.Cos(angle * Mathf.Deg2Rad) + player.transform.up * Mathf.Sin(angle * Mathf.Deg2Rad);
+            
         }
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (!player.IsNearGround())
-                return null;
-            return new LeapEndState();
+            if(player.CanAttack && player.input.SpecialAttack)
+            {
+                if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Forward)
+                    return new StingAttackStartState();
+                else if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Right || player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Left)
+                    return new SpinAttackStartState();
+            }
+            return null;
         }
     }
 
-    public class LeapEndState : PlayerState
+    // Sting Attack
+    public class StingAttackStartState : PlayerState
     {
-        private float timeCounter = 0;
-
+        private float timeCounter;
+        private float chargeTime, chargeTimeCounter;
         public override void Action(PlayerCharacter player)
         {
             player.ManualRotation(player.input.CameraInput);
-            timeCounter += Time.deltaTime;
+            timeCounter -= Time.deltaTime;
+            chargeTimeCounter += Time.deltaTime;
+            player.SpecialAttackMeter = Mathf.Clamp(chargeTimeCounter / chargeTime, 0, 1);
         }
 
         public override void Init(PlayerCharacter player)
         {
-            PlayerCamera.ScreenShake(0.5f, player.Position);
-            PlayerCamera.Recoil();
-            player.HeadKnockBack(-5);
-
-            // Do damage
-            Damage.ExplosiveDamage(player.transform.position, player.meleeAttackDamage * player.leapMeleeDamageMultiplier, player.leapRange, player);
-            player.animator.LeapEnd();
+            player.StingAttackStart();
+            timeCounter = player.animator.stingStartAnimationDuration;
+            chargeTime = player.stingAttackChargeTime;
         }
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (timeCounter < player.animator.leapLandingDuration)
-                return null;
-            return new FreeWalkState();
+            if (timeCounter <= 0 && !player.input.SpecialAttack)
+                return new StingAttackEndState();
+            return null;
+        }
+    }
+
+    public class StingAttackEndState : PlayerState
+    {
+        public override void Action(PlayerCharacter player)
+        {
+            player.ManualRotation(player.input.CameraInput);
+        }
+
+        public override void Init(PlayerCharacter player)
+        {
+            player.StingAttackEnd();
+        }
+
+        public override PlayerState Transition(PlayerCharacter player)
+        {
+            if (player.CanAttack)
+                return new BasicAttackState();
+            return null;
         }
     }
 
 
+    // Spin Attack
+    public class SpinAttackStartState : PlayerState
+    {
+        public float timeCounter;
+        private float chargeTime, chargeTimeCounter;
+        public override void Action(PlayerCharacter player)
+        {
+            player.ManualRotation(player.input.CameraInput);
+            timeCounter -= Time.deltaTime;
+            chargeTimeCounter += Time.deltaTime;
+            player.SpecialAttackMeter = Mathf.Clamp(chargeTimeCounter / chargeTime, 0, 1);
+        }
+
+        public override void Init(PlayerCharacter player)
+        {
+            player.SpinAttackStart();
+            timeCounter = player.animator.spinStartAnimationDuration;
+            chargeTime = player.spinAttackChargeTime;
+        }
+
+        public override PlayerState Transition(PlayerCharacter player)
+        {
+            if (timeCounter <= 0 && !player.input.SpecialAttack)
+                return new SpinAttackEndState();
+            return null;
+        }
+    }
+
+    public class SpinAttackEndState : PlayerState
+    {
+        public override void Action(PlayerCharacter player)
+        {
+
+        }
+
+        public override void Init(PlayerCharacter player)
+        {
+            player.SpinAttackEnd();
+        }
+
+        public override PlayerState Transition(PlayerCharacter player)
+        {
+            if (player.CanAttack)
+                return new BasicAttackState();
+            return null;
+        }
+    }
+
+    #endregion
 }
 
 

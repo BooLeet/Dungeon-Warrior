@@ -11,10 +11,14 @@ public class AICharacter : Character {
     public bool IsAlert { get; private set; }
     public bool CanAttack { get; private set; }
     public bool IsStunned { get; private set; }
-
+    private float stunCurrentTime;
+    public bool StickToSurfaceOnDeath { get; set; }
     public bool IsWalking { get; set; }
 
     public AICharacterAnimator characterAnimator;
+    public Pullable pullableBehaviour;
+    private Entity lastDamageGiver;
+    public Entity stunGiver { get; private set; }
 
     private AIDirector director;
     private Character currentEnemy;
@@ -34,6 +38,34 @@ public class AICharacter : Character {
 
     private Vector2 rapidMovementVector;
     private Vector2 targetRapidMovementVector;
+
+    protected override void ControllerStart()
+    {
+        currentState = new PatrolState();
+        director = AIDirector.GetInstance();
+        director.Register(this);
+
+        StartCoroutine(RapidMovementVectorGeneration());
+    }
+
+    protected override void ControllerUpdate()
+    {
+        if (!IsDead)
+        {
+            AttackTokenCooldownUpdate();
+            UpdateCurrentEnemy();
+            PropertiesUpdate();
+            RapidMovementVectorSmoothing();
+            StunUpdate();
+            StateMachine();
+
+            if (canAttack)
+                characterAnimator.WalkingAnimation(IsWalking && canAttack && IsNearGround());
+
+            Gravity();
+            ApplyMovement();
+        }
+    }
 
     #region AI functions
     private void StateMachine()
@@ -62,7 +94,10 @@ public class AICharacter : Character {
 
         if (currentEnemy)
         {
-            EnemyIsVisible = Utility.IsVisible(head.position, currentEnemy.gameObject, aiStats.visibilityDistance, currentEnemy.verticalTargetingOffset);
+            int layerMask = 1 << gameObject.layer;
+            layerMask = ~layerMask;
+            EnemyIsVisible = Utility.WithinAngle(head.position,head.forward, currentEnemy.gameObject.transform.position + Vector3.up * currentEnemy.verticalTargetingOffset,aiStats.visibilityAngle)
+                          && Utility.IsVisible(head.position, currentEnemy.gameObject, aiStats.visibilityDistance, currentEnemy.verticalTargetingOffset, layerMask);
             DistanceToEnemy = Vector3.Distance(Position, currentEnemy.Position);
         }
 
@@ -75,7 +110,8 @@ public class AICharacter : Character {
         var closestVisibleEnemyCharacters = from entity in EntityRegistry.GetInstance().GetClosestEntities(Position, aiStats.visibilityDistance, this)
                                             where entity as Character &&
                                             (entity as Character).stats.alliance != stats.alliance &&
-                                            Utility.IsVisible(head.position, entity.gameObject, aiStats.visibilityDistance, entity.verticalTargetingOffset)
+                                            Utility.IsVisible(head.position, entity.gameObject, aiStats.visibilityDistance, entity.verticalTargetingOffset) &&
+                                            Utility.WithinAngle(head.position, head.forward, entity.gameObject.transform.position + Vector3.up * entity.verticalTargetingOffset, aiStats.visibilityAngle)
                                             select new { character = entity as Character, distance = Vector3.Distance(Position, entity.Position) };
 
         if (closestVisibleEnemyCharacters.Count() == 0)
@@ -134,11 +170,14 @@ public class AICharacter : Character {
         canAttack = false;
         characterAnimator.Attack();
         yield return new WaitForSeconds(characterAnimator.attackAnimation.attackDamageDelay);
+        if (!IsStunned)
+        {
+            aiStats.attackFunction.DoAttackDamage(this, aiStats.attackDamage);
 
-        aiStats.attackFunction.DoAttackDamage(this, aiStats.attackDamage);
-
-        yield return new WaitForSeconds(characterAnimator.attackAnimation.attackDuration - characterAnimator.attackAnimation.attackDamageDelay);
-        canAttack = true;
+            yield return new WaitForSeconds(characterAnimator.attackAnimation.attackDuration - characterAnimator.attackAnimation.attackDamageDelay);
+            canAttack = true;
+        }
+        
     }
 
     // Makes character to do an attack and starts the attack token cooldown
@@ -148,6 +187,9 @@ public class AICharacter : Character {
         Attack();
     }
 
+    #endregion
+
+    #region Attack Tokens
     private void AttackTokenCooldownUpdate()
     {
         if (attackTokenCooldown > 0)
@@ -188,6 +230,9 @@ public class AICharacter : Character {
 
     }
 
+    #endregion
+
+    #region Rapid Movement
     private void RapidMovementVectorSmoothing()
     {
         rapidMovementVector = Vector2.Lerp(rapidMovementVector, targetRapidMovementVector, Time.deltaTime * 5);
@@ -209,7 +254,61 @@ public class AICharacter : Character {
 
     #endregion
 
+    #region Stun
+
+    public void Stun(float duration, Entity stunGiver)
+    {
+        //if (IsStunned)
+        //    return;
+        this.stunGiver = stunGiver;
+        stunCurrentTime = Mathf.Max(stunCurrentTime, duration);
+        //StartCoroutine(StunRoutine(duration));
+    }
+
+    private void StunUpdate()
+    {
+        if(stunCurrentTime > 0)
+        {
+            if(!IsStunned) 
+                characterAnimator.PlayStunStartAnimation();
+            IsStunned = true;
+            canAttack = false;
+            stunCurrentTime -= Time.deltaTime;
+        }
+        else
+        {
+            stunCurrentTime = 0;
+            if(IsStunned)
+                StartCoroutine(StunRecoveryRoutine());
+        }
+
+    }
+
+    private IEnumerator StunRecoveryRoutine()
+    {
+        characterAnimator.PlayStunEndAnimation();
+        yield return new WaitForSeconds(characterAnimator.stunEndDuration);
+        canAttack = true;
+        IsStunned = false;
+    }
+
+    private IEnumerator StunRoutine(float duration)
+    {
+        IsStunned = true;
+        canAttack = false;
+        characterAnimator.PlayStunStartAnimation();
+        yield return new WaitForSeconds(duration + characterAnimator.stunStartDuration);
+        characterAnimator.PlayStunEndAnimation();
+        yield return new WaitForSeconds(characterAnimator.stunEndDuration);
+        canAttack = true;
+        IsStunned = false;
+    }
+
+    #endregion
+
     #region Overrides
+    
+
     public override Vector3 GetAttackDirection(float spreadAngleDeg)
     {
         Vector3 insideUnitSphere = Random.insideUnitSphere * spreadAngleDeg / 90;
@@ -222,43 +321,25 @@ public class AICharacter : Character {
         return characterAnimator.attackAnimation.damageSource.position;
     }
 
-    protected override void ControllerStart()
-    {
-        currentState = new PatrolState();
-        director = AIDirector.GetInstance();
-        director.Register(this);
-
-        StartCoroutine(RapidMovementVectorGeneration());
-    }
-
-    protected override void ControllerUpdate()
-    {
-        if (!IsDead)
-        {
-            AttackTokenCooldownUpdate();
-            UpdateCurrentEnemy();
-            PropertiesUpdate();
-            RapidMovementVectorSmoothing();
-            StateMachine();
-
-            if(canAttack)
-                characterAnimator.WalkingAnimation(IsWalking && canAttack && IsNearGround());
-
-            Gravity();
-            ApplyMovement();
-        }
-    }
+    
 
     protected override void DeathEffect()
     {
         if (HasAttackToken)
             director.ReturnAttackToken();
         director.Unregister(this);
+        if(pullableBehaviour)
+            pullableBehaviour.Unregister();
+        Destroy(controller);
+        characterAnimator.DeathEffect(lastDamageGiver ? Position + 4 * (lastDamageGiver.Position - Position).normalized : Position, StickToSurfaceOnDeath);
         Destroy(gameObject);
     }
 
     protected override void OnDamageTaken(float rawDamage, Entity damageGiver, Vector3 sourcePosition)
     {
+        characterAnimator.PlayDamageEffect();
+        lastDamageGiver = damageGiver;
+
         if (currentEnemy == null && damageGiver as Character)
             Alarm(damageGiver as Character);
     }
