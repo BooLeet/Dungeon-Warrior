@@ -65,7 +65,7 @@ public abstract class CharacterAnimator : MonoBehaviour
     // Plays an attack sound
     protected void PlayAttackSound(AttackAnimationInfo attackAnimationInfo, float spacialBlend = 0.66f)
     {
-        AudioMixerGroup audioMixerGroup = GameManager.instance.sfxMixer.FindMatchingGroups("Master")[0];
+        AudioMixerGroup audioMixerGroup = GameManager.instance.GetSfxMixerGroup();
         Utility.PlayAudioClipAtPoint(attackAnimationInfo.attackSound, attackAnimationInfo.damageSource.position, attackAnimationInfo.damageSource, spacialBlend, audioMixerGroup);
         if (attackAnimationInfo.attackEffectPrefab)
             Instantiate(attackAnimationInfo.attackEffectPrefab, attackAnimationInfo.damageSource.position, attackAnimationInfo.damageSource.rotation);
@@ -73,7 +73,7 @@ public abstract class CharacterAnimator : MonoBehaviour
 
     public void PlayFootstepSound()
     {
-        AudioMixerGroup audioMixerGroup = GameManager.instance.sfxMixer.FindMatchingGroups("Master")[0];
+        AudioMixerGroup audioMixerGroup = GameManager.instance.GetSfxMixerGroup();
         Utility.PlayAudioClipAtPoint(footStepSound, transform.position, transform, 1, audioMixerGroup);
     }
 

@@ -15,10 +15,9 @@ public class HUD_DamageBonusBar : MonoBehaviour {
 	
 	
 	void Update () {
-        float damageMultiplier = player.DamageBonusCurrentMultiplier;
-        fillImage.fillAmount = Mathf.Lerp(fillImage.fillAmount, damageMultiplier % 1, Time.deltaTime * fillLerpParameter);
+        fillImage.fillAmount = Mathf.Lerp(fillImage.fillAmount, player.DamageBonusCurrentMultiplier / player.damageBonusMaxMultiplier, Time.deltaTime * fillLerpParameter);
         foreach(Text text in texts)
-            text.text = "x" + (damageMultiplier - damageMultiplier % 1).ToString();
+            text.text = "x" + player.GetDamageBonusMultiplier().ToString();
 
     }
 }

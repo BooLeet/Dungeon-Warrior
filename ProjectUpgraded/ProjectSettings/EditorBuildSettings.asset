@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/LoadingScreen.unity
     guid: 082cb57c84ac46b44b393e534f7ef0e5
   - enabled: 1
+    path: Assets/Scenes/DelveScene.unity
+    guid: 04e66eff68cd7924bae516141553ed23
+  - enabled: 1
     path: Assets/Scenes/E1M1.unity
     guid: c68776c0a48124245a404505ef1f1db3
   m_configObjects: {}

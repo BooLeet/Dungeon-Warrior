@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DeadlyObjectRegistry : MonoBehaviour {
     public static DeadlyObjectRegistry instance;
-    public List<DeadlyObject> deadlyObjects = new List<DeadlyObject>();
+    private List<DeadlyObject> deadlyObjects = new List<DeadlyObject>();
     public static DeadlyObjectRegistry GetInstance()
     {
         if (instance)
@@ -24,8 +24,21 @@ public class DeadlyObjectRegistry : MonoBehaviour {
         deadlyObjects.Remove(obj);
     }
 
+    private void ClearDestroyedObjects()
+    {
+        for (int i = 0; i < deadlyObjects.Count; ++i)
+            if (deadlyObjects[i] == null)
+            {
+                deadlyObjects[i] = deadlyObjects[deadlyObjects.Count - 1];
+                deadlyObjects.RemoveAt(deadlyObjects.Count - 1);
+                --i;
+            }
+    }
+
     public IEnumerable<DeadlyObject> GetClosestObjects(Vector3 position, float distance)
     {
+        ClearDestroyedObjects();
+
         return from obj in deadlyObjects
                where Vector3.Distance(position, obj.transform.position) <= distance
                select obj;

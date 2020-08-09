@@ -258,11 +258,11 @@ public class AICharacter : Character {
 
     public void Stun(float duration, Entity stunGiver)
     {
-        //if (IsStunned)
-        //    return;
+        if (!aiStats.canBeStunned)
+            return;
+
         this.stunGiver = stunGiver;
         stunCurrentTime = Mathf.Max(stunCurrentTime, duration);
-        //StartCoroutine(StunRoutine(duration));
     }
 
     private void StunUpdate()
@@ -286,18 +286,6 @@ public class AICharacter : Character {
 
     private IEnumerator StunRecoveryRoutine()
     {
-        characterAnimator.PlayStunEndAnimation();
-        yield return new WaitForSeconds(characterAnimator.stunEndDuration);
-        canAttack = true;
-        IsStunned = false;
-    }
-
-    private IEnumerator StunRoutine(float duration)
-    {
-        IsStunned = true;
-        canAttack = false;
-        characterAnimator.PlayStunStartAnimation();
-        yield return new WaitForSeconds(duration + characterAnimator.stunStartDuration);
         characterAnimator.PlayStunEndAnimation();
         yield return new WaitForSeconds(characterAnimator.stunEndDuration);
         canAttack = true;

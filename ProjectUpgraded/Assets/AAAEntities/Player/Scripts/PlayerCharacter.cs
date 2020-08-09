@@ -43,7 +43,8 @@ public class PlayerCharacter : Character
 
     [Header("Damage bonus mechanic")]
     public float damageBonusMaxMultiplier = 5f;
-    public float DamageBonusCurrentMultiplier { get; private set; } 
+    public float damageBonusSegmentSize = 0.1f;
+    public float DamageBonusCurrentMultiplier { get;private set; } 
     public float damageBonusIncrement = 0.5f;
     public int damageBonusFullIncrementHitCount = 3;
     public int damageBonusHalfIncrementHitCount = 5;
@@ -135,7 +136,7 @@ public class PlayerCharacter : Character
         CurrentMana = maxMana;
 
         DashMeter = dashCapacity;
-        DamageBonusCurrentMultiplier = 1;
+        DamageBonusCurrentMultiplier = 0;
 
         currentMovementState = new DirectMovementState();
         currentCombatState = new BasicAttackState();
@@ -145,7 +146,6 @@ public class PlayerCharacter : Character
     {
         if (GameManager.instance.IsPaused)
             return;
-
         input.UpdateValues();
         PauseHandler();
 
@@ -176,6 +176,15 @@ public class PlayerCharacter : Character
     }
 
     #region Misc Public Methods
+
+    public void Warp(Vector3 position)
+    {
+        //ResetInertia();
+        controller.enabled = false;
+        transform.position = position;
+        navAgent.Warp(position);
+        controller.enabled = true;
+    }
 
     public void PauseHandler()
     {
@@ -262,7 +271,7 @@ public class PlayerCharacter : Character
 
 
         PlayerCamera.ScreenShake(0.2f, Position);
-        PlayerCamera.Recoil();
+        //PlayerCamera.Recoil();
         HeadKnockBack(headKnockBackAngle);
         // Do damage
         attackFunction.DoAttackDamage(this, damage);
@@ -388,9 +397,9 @@ public class PlayerCharacter : Character
 
         while (timeCounter > 0)
         {
-            Ray ray = new Ray(head.position, head.forward);
             RaycastHit rayHit;
-            if (Physics.Raycast(ray, out rayHit, spinAttackRange))
+
+            if(Physics.SphereCast(head.position,1,head.forward,out rayHit,spinAttackRange))
             {
                 Entity hitEntity = rayHit.collider.GetComponent<Entity>();
                 if (hitEntity != null && hitEntity != previousEntity)
@@ -430,9 +439,9 @@ public class PlayerCharacter : Character
     #endregion
 
     #region Damage Bonus Mechanic
-    private float GetDamageBonusMultiplier()
+    public float GetDamageBonusMultiplier()
     {
-        return (DamageBonusCurrentMultiplier - DamageBonusCurrentMultiplier % 1);
+        return 1 + (DamageBonusCurrentMultiplier - DamageBonusCurrentMultiplier % damageBonusSegmentSize);
     }
 
     private void DamageBonusOnEnemyHit()
@@ -451,12 +460,12 @@ public class PlayerCharacter : Character
 
         damageBonusTimeCounter = damageBonusDecayDelay;
 
-        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier + damageBonus, 1, damageBonusMaxMultiplier + 1 - 0.0001f);
+        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier + damageBonus, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
     }
 
     private void DamageBonusOnPlayerHit()
     {
-        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - damageBonusIncrement / 2, 1, damageBonusMaxMultiplier + 1 - 0.0001f);
+        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - damageBonusIncrement / 2, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
     }
 
     private void DamageBonusDecayHandler()
@@ -464,7 +473,7 @@ public class PlayerCharacter : Character
         if (damageBonusTimeCounter > 0)
             damageBonusTimeCounter -= Time.deltaTime;
         else
-            DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - Time.deltaTime * damageBonusDecayPerSecond, 1, damageBonusMaxMultiplier + 1 - 0.0001f);
+            DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - Time.deltaTime * damageBonusDecayPerSecond, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
     }
 
     #endregion

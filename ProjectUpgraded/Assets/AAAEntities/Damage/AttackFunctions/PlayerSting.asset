@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e078e6490701c540add3cdbbe58df60, type: 3}
   m_Name: PlayerSting
   m_EditorClassIdentifier: 
-  enemiesPerHit: 4
+  enemiesPerHit: 1
   attackRange: 15
-  angle: 20
+  angle: 90

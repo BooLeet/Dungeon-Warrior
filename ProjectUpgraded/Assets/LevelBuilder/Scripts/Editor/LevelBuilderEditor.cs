@@ -14,11 +14,13 @@ public class LevelBuilderEditor : Editor {
         {
             levelBuilder.Clear();
             levelBuilder.Build();
+            EditorUtility.SetDirty(levelBuilder.gameObject);
         }
 
         if (GUILayout.Button("Clear"))
         {
             levelBuilder.Clear();
+            EditorUtility.SetDirty(levelBuilder.gameObject);
         }
     }
 }

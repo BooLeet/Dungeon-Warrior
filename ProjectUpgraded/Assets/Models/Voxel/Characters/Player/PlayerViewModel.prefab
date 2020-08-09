@@ -1105,6 +1105,8 @@ MonoBehaviour:
     attackTriggers:
     - AttackLeft
     - AttackRight
+    - AttackLeftAlt
+    - AttackRightAlt
     attackDamageDelay: 0.13333334
     attackDuration: 0.5
     attackAnimationDuration: 1

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5ea50239fcdcd49b67af63b42ac990, type: 3}
+  m_Name: DelveCastleRoomSet
+  m_EditorClassIdentifier: 
+  startRoom: {fileID: 11400000, guid: 98cba0224062efd44a99d5cb54780be8, type: 2}
+  easy:
+  - {fileID: 11400000, guid: e2134228615bc974da40d75e867e94a6, type: 2}
+  - {fileID: 11400000, guid: 771fe081b47992a48b2fd744df80a40f, type: 2}
+  - {fileID: 11400000, guid: 11f69ac63f6ef9a40bff603b634c8aed, type: 2}
+  medium:
+  - {fileID: 11400000, guid: f6910546e871071428b4f333226e40e6, type: 2}
+  - {fileID: 11400000, guid: 177363a8fb8fb0746a4e244da14fec5d, type: 2}
+  hard:
+  - {fileID: 11400000, guid: d0d48917cf40e1740bfdb51086669650, type: 2}
+  smallLoot:
+  - {fileID: 11400000, guid: 1c4e7adfea65d304fabeee4c746b79b2, type: 2}
+  bigLoot:
+  - {fileID: 11400000, guid: 1c4e7adfea65d304fabeee4c746b79b2, type: 2}

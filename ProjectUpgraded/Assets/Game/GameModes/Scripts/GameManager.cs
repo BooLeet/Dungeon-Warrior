@@ -8,6 +8,8 @@ using UnityEngine.Rendering.PostProcessing;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
+
+
     public LanguagePack languagePack;
     [HideInInspector]public Settings settings;
     public PostProcessVolume[] postProcess;
@@ -50,5 +52,15 @@ public class GameManager : MonoBehaviour {
     {
         Utility.DisbleCursor();
         UnpauseGame();
+    }
+
+    public AudioMixerGroup GetSfxMixerGroup()
+    {
+        return sfxMixer.FindMatchingGroups("Master")[0];
+    }
+
+    public AudioMixerGroup GetMusicMixerGroup()
+    {
+        return musicMixer.FindMatchingGroups("Master")[0];
     }
 }

@@ -40,7 +40,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1005872373102630}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
@@ -228,17 +228,18 @@ MonoBehaviour:
   meleeAttackFunction: {fileID: 11400000, guid: f56da3d874f80ed49948ad0b3cd04a3c,
     type: 2}
   meleeAttackDamage: 12
-  meleeAttackHeadKnockBackAngle: -2
+  meleeAttackHeadKnockBackAngle: 0
   targetingRaycastRange: 500
   revolverAttackFunction: {fileID: 11400000, guid: 7bdb1b99f9028fa46ab92243fe904058,
     type: 2}
   revolverAttackDamage: 12
   revolverAttackHeadKnockBackAngle: 2
-  damageBonusMaxMultiplier: 4
-  damageBonusIncrement: 0.15
+  damageBonusMaxMultiplier: 3
+  damageBonusSegmentSize: 0.1
+  damageBonusIncrement: 0.05
   damageBonusFullIncrementHitCount: 3
   damageBonusHalfIncrementHitCount: 5
-  damageBonusDecayPerSecond: 0.2
+  damageBonusDecayPerSecond: 0.1
   damageBonusDecayDelay: 1.5
   stingAttackFunction: {fileID: 11400000, guid: f0f403c8ab4a31d448243d1dd9f2140a,
     type: 2}
@@ -266,7 +267,7 @@ MonoBehaviour:
   dashSpeed: 45
   dashDuration: 0.15
   dashCapacity: 1
-  dashCooldownTime: 0.5
+  dashCooldownTime: 0.75
   dashInversionMinAngle: 70
   currentMovementStateName: 
   currentCombatStateName: 
@@ -739,6 +740,16 @@ PrefabInstance:
       propertyPath: revolverAttack.attackSound
       value: 
       objectReference: {fileID: 8300000, guid: 37e89318e378f374aa3a6463d6cc7093, type: 3}
+    - target: {fileID: 6190639966206353333, guid: a646368a69b82274a8f30fe14d0f52f5,
+        type: 3}
+      propertyPath: meleeAttack.attackDuration
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6190639966206353333, guid: a646368a69b82274a8f30fe14d0f52f5,
+        type: 3}
+      propertyPath: meleeAttack.attackDamageDelay
+      value: 0.16666667
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a646368a69b82274a8f30fe14d0f52f5, type: 3}
 --- !u!114 &114016816582967726 stripped
@@ -766,6 +777,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4898342291613114}
     m_Modifications:
+    - target: {fileID: 343517689735923233, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 114961775394144616}
     - target: {fileID: 6655432661937311999, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -871,6 +887,26 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6655738477851166473, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655738477851166473, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 404
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655753969391106485, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6655753969391106485, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 406
+      objectReference: {fileID: 0}
     - target: {fileID: 6802635624055808399, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
         type: 3}
       propertyPath: OutputAudioMixerGroup
@@ -917,6 +953,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 114961775394144616}
+    - target: {fileID: 6834119062811835749, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_Text
+      value: x4.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834119062811835749, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6834675316786272869, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
         type: 3}
       propertyPath: player
@@ -927,6 +973,16 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 114961775394144616}
+    - target: {fileID: 6834720996225689593, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_Text
+      value: x4.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6834720996225689593, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
+        type: 3}
+      propertyPath: m_FontData.m_Alignment
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6864057028594156279, guid: 57b1ef24b0ab2f94c9a6dc9cde915743,
         type: 3}
       propertyPath: m_Name

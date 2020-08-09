@@ -23,4 +23,6 @@ public class AIStats : ScriptableObject {
     public float attackTokenCooldownTime = 1;
     [Range(0, 20)]
     public uint attacksPerToken = 1;
+    [Space]
+    public bool canBeStunned = false;
 }

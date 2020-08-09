@@ -21,3 +21,4 @@ MonoBehaviour:
   visibilityAngle: 90
   attackTokenCooldownTime: 1.2
   attacksPerToken: 1
+  canBeStunned: 1

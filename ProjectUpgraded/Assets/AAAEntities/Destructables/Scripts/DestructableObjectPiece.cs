@@ -12,6 +12,7 @@ public class DestructableObjectPiece : MonoBehaviour {
             return;
 
         transform.parent = null;
+        DestructableObjectPieceRegistry.GetInstance().Register(this);
         meshCollider = gameObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = meshFilter.mesh;
         meshCollider.convex = true;
@@ -24,6 +25,7 @@ public class DestructableObjectPiece : MonoBehaviour {
     public void DestructSticky()
     {
         transform.parent = null;
+        DestructableObjectPieceRegistry.GetInstance().Register(this);
     }
 
     private IEnumerator DisableCollisions(float delay)

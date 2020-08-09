@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -12,6 +13,7 @@ MonoBehaviour:
   m_Name: DemonSoldierStats
   m_EditorClassIdentifier: 
   attackFunction: {fileID: 11400000, guid: f2e73306a42c9ee42b1ac5e7bc39584e, type: 2}
+  attackTokenType: 0
   attackDamage: 25
   visibilityDistance: 100
   attackDistance: 2.75
@@ -19,3 +21,4 @@ MonoBehaviour:
   visibilityAngle: 90
   attackTokenCooldownTime: 2
   attacksPerToken: 1
+  canBeStunned: 1
