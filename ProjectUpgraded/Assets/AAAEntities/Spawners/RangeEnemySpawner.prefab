@@ -93,4 +93,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 1446223956775696, guid: 965ce67287da3064cbdea04e8ec5319d, type: 3}
-  spawnDistance: 20
+  spawnDistance: 50
+  spawnRadius: 2

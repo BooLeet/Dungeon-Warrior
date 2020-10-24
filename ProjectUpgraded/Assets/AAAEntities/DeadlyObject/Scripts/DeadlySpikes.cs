@@ -6,6 +6,8 @@ public class DeadlySpikes : DeadlyObject {
     public Transform bodyStickTransform;
     private bool isActive = true;
     public AudioSource source;
+    public GameObject indicator;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!isActive)
@@ -20,9 +22,12 @@ public class DeadlySpikes : DeadlyObject {
         DeadlyObjectRegistry.GetInstance().Unregister(this);
         ai.transform.position = bodyStickTransform.position;
         ai.StickToSurfaceOnDeath = true;
-        Destroy(ai.navAgent);
-        Destroy(ai.controller);
-        Damage.SendDamageFeedback(ai.stunGiver, ai, ai.TakeDamage(ai.maxHealth, ai.stunGiver, ai.stunGiver.Position));
+        ai.DestroyMovementComponents();
+        Damage.SendDamageFeedback(ai.stunGiver, ai, ai.TakeDamage(ai.GetMaxHealth(), ai.stunGiver, ai.stunGiver.Position));
+
+        GameMode.gameModeInstance.OnSpikesKill(this);
+        if (indicator)
+            Destroy(indicator);
     }
 
 }

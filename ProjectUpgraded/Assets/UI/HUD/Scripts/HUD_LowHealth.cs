@@ -9,7 +9,8 @@ public class HUD_LowHealth : MonoBehaviour
     public RawImage image;
     [Range(0,1)]
     public float healthPercentThreshold = 0.2f;
-    public float flashingSpeed = 1;
+    public float minFlashingSpeed = 10;
+    public float maxFlashingSpeed = 30;
     private Color targetColor;
     private float timeCounter = 0;
 
@@ -22,10 +23,13 @@ public class HUD_LowHealth : MonoBehaviour
 
     void Update()
     {
-        timeCounter += Time.deltaTime * flashingSpeed;
+        float currentHealthPercent = player.CurrentHealth / player.GetMaxHealth();
+        float currentFlashingSpeed = Mathf.Lerp(maxFlashingSpeed, minFlashingSpeed, currentHealthPercent / healthPercentThreshold);
+
+        timeCounter += Time.deltaTime * currentFlashingSpeed;
         timeCounter %= Mathf.PI;
 
-        if (player.CurrentHealth / player.maxHealth <= healthPercentThreshold)
+        if (currentHealthPercent <= healthPercentThreshold)
             targetColor.a = Mathf.Sin(timeCounter);
         else
             targetColor.a = 0;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Interactable : MonoBehaviour {
     public Transform interactPoint;
+    public bool interactionEnabled = true;
     public Vector3 ButtonPosition { get { return interactPoint.position; } }
 
     void Awake()
@@ -13,7 +14,13 @@ public abstract class Interactable : MonoBehaviour {
         InteractableRegistry.GetInstance().Register(this);
     }
 
-    public abstract void Interact(Character interactingCharacter);
+    public void Interact(Character interactingCharacter)
+    {
+        GameMode.gameModeInstance.OnInteraction(this);
+        _Interact(interactingCharacter);
+    }
+
+    protected abstract void _Interact(Character interactingCharacter);
 
     public abstract string GetPrompt(Character interactingCharacter);
 

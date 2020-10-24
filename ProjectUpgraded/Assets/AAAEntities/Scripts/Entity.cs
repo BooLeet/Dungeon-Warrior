@@ -6,7 +6,7 @@ public abstract class Entity : MonoBehaviour {
     public float verticalTargetingOffset;
     public Vector3 Position { get { return transform.position + transform.up * verticalTargetingOffset; } }
 
-    public float maxHealth = 100;
+    protected float _maxHealth;
     [Range(0,1)]
     public float selfDamageMultiplier = 0.2f;
     public float CurrentHealth { get; private set; }
@@ -17,7 +17,7 @@ public abstract class Entity : MonoBehaviour {
 
     void Awake()
     {
-        CurrentHealth = maxHealth;
+        CurrentHealth = _maxHealth = GetMaxHealth();
         EntityRegistry.GetInstance().Register(this);
     }
 
@@ -52,10 +52,11 @@ public abstract class Entity : MonoBehaviour {
             return;
 
         CurrentHealth += amount;
-        if (CurrentHealth > maxHealth)
-            CurrentHealth = maxHealth;
+        if (CurrentHealth > _maxHealth)
+            CurrentHealth = _maxHealth;
     }
 
+    public abstract float GetMaxHealth();
     protected abstract void OnDamageTaken(float rawDamage, Entity damageGiver, Vector3 sourcePosition);
     protected abstract void DeathEffect();
 

@@ -12,20 +12,43 @@ public class Settings
     [System.Serializable]
     public struct GraphicSettings
     {
-        public bool motionBlur, filmGrain, AO;
-        public byte shadowQuality;
+        public bool bloom, filmGrain, AO;
+        public byte renderResolution;//1 = 1/8, 2 = 1/4, 3 = 1/2, 4 = 1
+        public byte frameRate;//1 = 30,2 = 60,3 = uncapped
 
-        public GraphicSettings(bool motionBlur, bool filmGrain, bool AO, byte shadowQuality)
+        public GraphicSettings(bool bloom, bool filmGrain, bool AO, byte renderResolution, byte frameRate)
         {
-            this.motionBlur = motionBlur;
+            this.bloom = bloom;
             this.filmGrain = filmGrain;
             this.AO = AO;
-            this.shadowQuality = (byte)Mathf.Clamp(shadowQuality, 1, 4);
+            this.renderResolution = (byte)Mathf.Clamp(renderResolution, 1, 4);
+            this.frameRate = (byte)Mathf.Clamp(frameRate, 1, 3);
         }
 
         public static GraphicSettings Default()
         {
-            return new GraphicSettings(true, true, true, 4);
+            return new GraphicSettings(false, false, false, 1,2);
+        }
+
+        public int GetTargetFrameRate()
+        {
+            switch (frameRate)
+            {
+                case 1: return 30;
+                case 2: return 60;
+                default: return 120;
+            }
+        }
+
+        public float GetResolutionScale()
+        {
+            switch(renderResolution)
+            {
+                case 1: return 1 / 8f;
+                case 2: return 1 / 4f;
+                case 3: return 1 / 2f;
+                default: return 1;
+            }
         }
     }
 
@@ -54,13 +77,13 @@ public class Settings
 
         public GameSettings(float mouseSensitivity, bool showReticule)
         {
-            this.mouseSensitivity = Mathf.Clamp(mouseSensitivity, 0.001f, 1);
+            this.mouseSensitivity = mouseSensitivity;
             this.showReticule = showReticule;
         }
 
         public static GameSettings Default()
         {
-            return new GameSettings(0.5f, true);
+            return new GameSettings(2.5f, true);
         }
     }
 
@@ -89,30 +112,34 @@ public class Settings
         ApplyGameplaySettings();
     }
 
-    public void ApplyGraphicsSettings(PostProcessVolume[] volumes)
+    public void ApplyGraphicsSettings(PostProcessVolume[] volumes, RenderResolutionScaler resolutionScaler)
     {
         foreach(PostProcessVolume volume in volumes)
         {
-            MotionBlur motionBlur = null;
+            Bloom bloom = null;
             Grain filmGrain = null;
             AmbientOcclusion AO = null;
 
-            volume.profile.TryGetSettings<MotionBlur>(out motionBlur);
+            
+            volume.profile.TryGetSettings<Bloom>(out bloom);
             volume.profile.TryGetSettings<Grain>(out filmGrain);
             volume.profile.TryGetSettings<AmbientOcclusion>(out AO);
 
-            if(motionBlur)
-                motionBlur.enabled.value = graphicSettings.motionBlur;
+            if(bloom)
+                bloom.enabled.value = graphicSettings.bloom;
             if(filmGrain)
                 filmGrain.enabled.value = graphicSettings.filmGrain;
             if(AO)
                 AO.enabled.value = graphicSettings.AO;
         }
+
+        resolutionScaler.ApplyResolutionScale(graphicSettings.GetResolutionScale());
     }
 
     public void ApplyGraphicsSettings()
     {
-        ApplyGraphicsSettings(GameManager.instance.postProcess);
+        ApplyGraphicsSettings(GameManager.instance.postProcess, GameManager.instance.resolutionScaler);
+        Application.targetFrameRate = graphicSettings.GetTargetFrameRate();
     }
 
     public void ApplyAudioSettings(AudioMixer sfxMixer, AudioMixer musicMixer)

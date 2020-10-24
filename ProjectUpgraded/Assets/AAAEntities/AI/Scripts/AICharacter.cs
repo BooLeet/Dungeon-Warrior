@@ -15,8 +15,10 @@ public class AICharacter : Character {
     public bool StickToSurfaceOnDeath { get; set; }
     public bool IsWalking { get; set; }
 
+    [Header("Stats")]
+    public AIStats aiStats;
+
     public AICharacterAnimator characterAnimator;
-    public Pullable pullableBehaviour;
     private Entity lastDamageGiver;
     public Entity stunGiver { get; private set; }
 
@@ -26,8 +28,6 @@ public class AICharacter : Character {
 
     private bool canAttack = true;
 
-    [Header("AI Stats")]
-    public AIStats aiStats;
 
     private float attackTokenCooldown;
     private bool attackCooledDown = true;
@@ -61,7 +61,6 @@ public class AICharacter : Character {
 
             if (canAttack)
                 characterAnimator.WalkingAnimation(IsWalking && canAttack && IsNearGround());
-
             Gravity();
             ApplyMovement();
         }
@@ -96,7 +95,10 @@ public class AICharacter : Character {
         {
             int layerMask = 1 << gameObject.layer;
             layerMask = ~layerMask;
-            EnemyIsVisible = Utility.WithinAngle(head.position,head.forward, currentEnemy.gameObject.transform.position + Vector3.up * currentEnemy.verticalTargetingOffset,aiStats.visibilityAngle)
+            Vector3 coneStart = head.position - head.forward * 2;
+
+            EnemyIsVisible = Utility.WithinAngle(coneStart, head.forward, currentEnemy.gameObject.transform.position + Vector3.up * currentEnemy.verticalTargetingOffset, aiStats.visibilityAngle)
+                          && Utility.WithinAngle(head.position, head.forward, currentEnemy.gameObject.transform.position + Vector3.up * currentEnemy.verticalTargetingOffset, 180)
                           && Utility.IsVisible(head.position, currentEnemy.gameObject, aiStats.visibilityDistance, currentEnemy.verticalTargetingOffset, layerMask);
             DistanceToEnemy = Vector3.Distance(Position, currentEnemy.Position);
         }
@@ -109,7 +111,7 @@ public class AICharacter : Character {
 
         var closestVisibleEnemyCharacters = from entity in EntityRegistry.GetInstance().GetClosestEntities(Position, aiStats.visibilityDistance, this)
                                             where entity as Character &&
-                                            (entity as Character).stats.alliance != stats.alliance &&
+                                            (entity as Character).GetCharacterStats().alliance != GetCharacterStats().alliance &&
                                             Utility.IsVisible(head.position, entity.gameObject, aiStats.visibilityDistance, entity.verticalTargetingOffset) &&
                                             Utility.WithinAngle(head.position, head.forward, entity.gameObject.transform.position + Vector3.up * entity.verticalTargetingOffset, aiStats.visibilityAngle)
                                             select new { character = entity as Character, distance = Vector3.Distance(Position, entity.Position) };
@@ -155,6 +157,11 @@ public class AICharacter : Character {
             LookAt(currentEnemy.Position);
     }
 
+    private float GetAttackDamage()
+    {
+        return aiStats.attackDamage + aiStats.attackDamagePerLevel * GameMode.gameModeInstance.GetEnemyLevel();
+    }
+
     private void Attack()
     {
         if (!canAttack)
@@ -172,7 +179,7 @@ public class AICharacter : Character {
         yield return new WaitForSeconds(characterAnimator.attackAnimation.attackDamageDelay);
         if (!IsStunned)
         {
-            aiStats.attackFunction.DoAttackDamage(this, aiStats.attackDamage);
+            aiStats.attackFunction.DoAttackDamage(this, GetAttackDamage());
 
             yield return new WaitForSeconds(characterAnimator.attackAnimation.attackDuration - characterAnimator.attackAnimation.attackDamageDelay);
             canAttack = true;
@@ -295,7 +302,10 @@ public class AICharacter : Character {
     #endregion
 
     #region Overrides
-    
+    public override CharacterStats GetCharacterStats()
+    {
+        return aiStats;
+    }
 
     public override Vector3 GetAttackDirection(float spreadAngleDeg)
     {
@@ -309,16 +319,29 @@ public class AICharacter : Character {
         return characterAnimator.attackAnimation.damageSource.position;
     }
 
-    
+    public override float GetMaxHealth()
+    {
+        return aiStats.maxHealth + aiStats.healthPerLevel * GameMode.gameModeInstance.GetEnemyLevel();
+    }
+
+    protected override float GetMoveSpeed()
+    {
+        return aiStats.moveSpeed + aiStats.moveSpeedPerLevel * GameMode.gameModeInstance.GetEnemyLevel();
+    }
+
+    public override float GetInAirSpeed()
+    {
+        return 0;
+    }
 
     protected override void DeathEffect()
     {
+        GameMode.gameModeInstance.OnAIKilled(this);
+
         if (HasAttackToken)
             director.ReturnAttackToken(this);
         director.Unregister(this);
-        if(pullableBehaviour)
-            pullableBehaviour.Unregister();
-        Destroy(controller);
+        DestroyMovementComponents();
         characterAnimator.DeathEffect(lastDamageGiver ? Position + 4 * (lastDamageGiver.Position - Position).normalized : Position, StickToSurfaceOnDeath);
         Destroy(gameObject);
     }

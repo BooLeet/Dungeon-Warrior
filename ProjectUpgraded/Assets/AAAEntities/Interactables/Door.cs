@@ -7,12 +7,13 @@ public class Door : Interactable {
     public DoorState doorState;
     public Transform doorTransform;
     public LootScriptable keyLoot;
+    public bool onlyOpen = false;
 
     private float targetDoorRotation = 90;
     private float animationTime = 0.5f;
     private bool animationPlaying = false;
 
-    public override void Interact(Character interactingCharacter)
+    protected override void _Interact(Character interactingCharacter)
     {
         OpenClose(interactingCharacter);
     }
@@ -28,18 +29,20 @@ public class Door : Interactable {
             targetDoorRotation = 0;
             StartCoroutine(ApplyAnimation());
         }
-        else
+        else if (doorState == DoorState.Closed || doorState == DoorState.KeyRequired)
         {
-            if (doorState == DoorState.Locked)
+            if(doorState == DoorState.KeyRequired)
             {
-                // "Is Locked" message
+                if (interactingCharacter.inventory.HasResource(keyLoot))
+                    interactingCharacter.inventory.SpendResource(keyLoot);
+                else
+                    return;
             }
-            else if(doorState == DoorState.Closed || doorState == DoorState.KeyRequired && interactingCharacter.inventory.HasLoot(keyLoot))//|| doorState == DoorState.KeyRequired && player.hasKey)
-            {
-                doorState = DoorState.Open;
-                targetDoorRotation = 90;
-                StartCoroutine(ApplyAnimation());
-            }
+            if (onlyOpen)
+                interactionEnabled = false;
+            doorState = DoorState.Open;
+            targetDoorRotation = 90;
+            StartCoroutine(ApplyAnimation());
         }
     }
 
@@ -63,7 +66,8 @@ public class Door : Interactable {
     void Start()
     {
         targetDoorRotation = doorState == DoorState.Open ? 90 : 0;
-
+        if (onlyOpen && doorState == DoorState.Open)
+            interactionEnabled = false;
         doorTransform.localRotation = Quaternion.Euler(0, targetDoorRotation, 0);
     }
 

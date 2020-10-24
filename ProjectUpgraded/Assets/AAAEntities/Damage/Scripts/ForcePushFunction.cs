@@ -20,9 +20,14 @@ public class ForcePushFunction : AttackFunction
     public float deadlyObjectRange = 30f;
     [Range(0,360)]
     public float angle = 90;
+    [Space]
+    public GameObject effectPrefab;
+    public GameObject speedEffectPrefab;
 
     public override void DoAttackDamage(Character attacker, float damage)
     {
-        Damage.ForcePush(attacker.GetAttackSource(), attacker.GetAttackDirection(0), attackRange, deadlyObjectRange, angle, attacker, enemiesPerHit, stunDuration, pushDuration, pushSpeed, enemyLayer);
+        Damage.ForcePush(attacker.GetAttackSource(), attacker.GetAttackDirection(0), attackRange, deadlyObjectRange, angle, attacker, enemiesPerHit, stunDuration, pushDuration, pushSpeed, enemyLayer, speedEffectPrefab);
+        if(effectPrefab)
+            Instantiate(effectPrefab, attacker.GetAttackSource(), Quaternion.LookRotation(attacker.GetAttackDirection(0)));
     }
 }

@@ -10,6 +10,8 @@ public class PlayerCharacterAnimator : CharacterAnimator
     private int meleeAttackTriggerIndex = 0;
 
     [Header("Revolver Attack")]
+    public string revolverStartTrigger = "RevolverStart";
+    public float revolverStartAnimationDuration;
     public AttackAnimationInfo revolverAttack;
 
     [Header("Sting Attack")]
@@ -32,6 +34,17 @@ public class PlayerCharacterAnimator : CharacterAnimator
     [Header("Force Pull")]
     public AttackAnimationInfo forcePull;
 
+    [Header("Death")]
+    public string deathTrigger = "Death";
+
+    [Header("Equipment")]
+    public Transform meleeWeaponSlot;
+    public float weaponScale = 10;
+
+    [Header("Equipment")]
+    public string inspectWeaponTrigger = "Inspect";
+    public float inspectAnimationDuration = 2.5f;
+
     #region Regular Melee Attack
     // Plays the melee attack animation
     public void MeleeAttack()
@@ -48,8 +61,14 @@ public class PlayerCharacterAnimator : CharacterAnimator
     #endregion
 
     #region Revolver Attack
-    // Plays the revolver attack animation
-    public void RevolverAttack()
+    // Plays the revolver attack start animation
+    public void RevolverAttackStart()
+    {
+        animator.SetTrigger(revolverStartTrigger);
+    }
+
+    // Plays the revolver attack end animation
+    public void RevolverAttackEnd()
     {
         animator.SetTrigger(revolverAttack.attackTriggers[0]);
     }
@@ -134,6 +153,41 @@ public class PlayerCharacterAnimator : CharacterAnimator
     }
 
     #endregion
+
+    #region Equipment
+    /// <summary>
+    /// Deletes all objects from the melee weapon slot
+    /// </summary>
+    private void ClearMeleeWeapon()
+    {
+        if (meleeWeaponSlot.childCount > 0)
+            Destroy(meleeWeaponSlot.GetChild(0).gameObject);    
+    }
+
+    /// <summary>
+    /// Equips a melee weapon
+    /// </summary>
+    public void EquipMeleeWeapon(MeleeWeapon weapon)
+    {
+        ClearMeleeWeapon();
+        Instantiate(weapon.prefab, meleeWeaponSlot).transform.localScale = Vector3.one * weaponScale;
+    }
+
+    /// <summary>
+    /// Plays weapon inspect animation
+    /// </summary>
+    public void InspectWeapon()
+    {
+        animator.SetTrigger(inspectWeaponTrigger);
+    }
+
+    #endregion
+
+    // Plays the death animation
+    public void PlayDeathAnimation()
+    {
+        animator.SetTrigger(deathTrigger);
+    }
 
     private void PlayAttackEffect(AttackAnimationInfo attackAnimationInfo)
     {

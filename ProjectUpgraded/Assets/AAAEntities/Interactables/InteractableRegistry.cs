@@ -53,7 +53,7 @@ public class InteractableRegistry : MonoBehaviour {
         ClearDestroyedObjects();
 
         return from interactable in interactables
-               where Vector3.Distance(position, interactable.ButtonPosition) <= distance
+               where Vector3.Distance(position, interactable.ButtonPosition) <= distance && interactable.interactionEnabled
                select interactable;
     }
 }

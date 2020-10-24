@@ -5,7 +5,14 @@ using UnityEngine.Audio;
 
 public static class Utility{
     public delegate void VoidFunction();
-
+    /// <summary>
+    /// Checks if the object position withing an angle
+    /// </summary>
+    /// <param name="pivotPosition"></param>
+    /// <param name="pivotDirection"></param>
+    /// <param name="objectPosition"></param>
+    /// <param name="angle"> angle in degrees</param>
+    /// <returns></returns>
     public static bool WithinAngle(Vector3 pivotPosition,Vector3 pivotDirection,Vector3 objectPosition,float angle)
     {
         angle /= 2;

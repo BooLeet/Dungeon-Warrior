@@ -5,10 +5,12 @@ using System.Linq;
 
 public static class Damage {
 
-    public static void MeleeDamage(Vector3 origin, Vector3 direction, float damage, float range, float angle, Entity damagingEntity,int enemiesToHit)
+    public static void MeleeDamage(Vector3 origin, Vector3 direction, float damage, float range,float coneOffset, float angle, Entity damagingEntity,int enemiesToHit)
     {
-        var closestEntitiesWithinAngle = from entity in EntityRegistry.GetInstance().GetClosestEntities(origin, range, damagingEntity)
-                                         where Utility.WithinAngle(origin, direction, entity.Position, angle) && Vector3.Distance(entity.Position, origin) <= range && Utility.IsVisible(origin,entity.gameObject,range,entity.verticalTargetingOffset)
+        Vector3 offsetOrigin = origin - direction.normalized * coneOffset;
+        var closestEntitiesWithinAngle = from entity in EntityRegistry.GetInstance().GetClosestEntities(offsetOrigin, range + coneOffset, damagingEntity)
+                                         where Utility.WithinAngle(offsetOrigin, direction, entity.Position, angle) && Vector3.Distance(entity.Position, offsetOrigin) >= coneOffset && 
+                                         Utility.IsVisible(origin,entity.gameObject,range,entity.verticalTargetingOffset)
                                          select new { entity, distance = Vector3.Distance(entity.Position, origin) };
 
         IEnumerable<Entity> entitiesToDamage = from entityInfo in closestEntitiesWithinAngle
@@ -16,12 +18,25 @@ public static class Damage {
                                orderby entityInfo.distance
                                select entityInfo.entity;
 
+        // if entity's Position didn't get into the cone
+        Ray forwardRay = new Ray(origin, direction);
+        RaycastHit rayHit;
+        if (Physics.Raycast(forwardRay, out rayHit, range))
+        {
+            Entity hitEntity = rayHit.collider.GetComponent<Entity>();
+            if (hitEntity && !entitiesToDamage.Contains(hitEntity))
+            {
+                SendDamageFeedback(damagingEntity, hitEntity, hitEntity.TakeDamage(damage, damagingEntity, damagingEntity.Position));
+                --enemiesToHit;
+            }
+        }
+
+
         for (int i = 0; i < Mathf.Min(enemiesToHit, entitiesToDamage.Count()) ; ++i)
         {
             Entity entity = entitiesToDamage.ElementAt(i);
             SendDamageFeedback(damagingEntity, entity, entity.TakeDamage(damage, damagingEntity, damagingEntity.Position));
         }
-            
     }
 
 
@@ -56,7 +71,7 @@ public static class Damage {
         }
     }
 
-    public static void ForcePush(Vector3 origin, Vector3 direction, float enemyRange,float deadlyObjectRange, float angle, Entity damagingEntity, int enemiesToHit,float stunDuration,float pushDuration,float pushSpeed,int enemyLayer)
+    public static void ForcePush(Vector3 origin, Vector3 direction, float enemyRange,float deadlyObjectRange, float angle, Entity damagingEntity, int enemiesToHit,float stunDuration,float pushDuration,float pushSpeed,int enemyLayer,GameObject effectPrefab)
     {
         var closestAIWithinAngle = from entity in EntityRegistry.GetInstance().GetClosestEntities(origin, enemyRange, damagingEntity)
                                          where Utility.WithinAngle(origin, direction, entity.Position, angle) && Vector3.Distance(entity.Position, origin) <= enemyRange
@@ -84,10 +99,14 @@ public static class Damage {
         for (int i = 0; i < Mathf.Min(enemiesToHit, AIToPush.Count()); ++i)
         {
             AICharacter character = AIToPush.ElementAt(i);
+            float duration = character.aiStats.pushDurationMultiplier * pushDuration;
             
             character.Stun(stunDuration, damagingEntity);
-            Vector3 pushDirection = closestObject? closestObject.Position - character.Position : character.Position - origin;
-            character.StartCoroutine(ForcePushRoutine(pushDuration, pushSpeed, character, pushDirection));
+            Vector3 pushDirection = (closestObject && character.aiStats.canBeStunned) ? closestObject.Position - character.Position : character.Position - origin;
+
+            if (effectPrefab)
+                GameObject.Instantiate(effectPrefab, character.Position, Quaternion.LookRotation(pushDirection), character.transform).AddComponent<DestroyOnTime>().delay = duration;
+            character.StartCoroutine(ForcePushRoutine(duration, pushSpeed, character, pushDirection));
         }
 
     }
@@ -98,8 +117,7 @@ public static class Damage {
         float timeCounter = pushDuration;
         while(timeCounter > 0)
         {
-            if(aICharacter.controller)
-                aICharacter.controller.Move(direction * pushSpeed * Time.deltaTime);
+            aICharacter.JustMove(direction * pushSpeed * Time.deltaTime);
             yield return null;
             timeCounter -= Time.deltaTime;
         }

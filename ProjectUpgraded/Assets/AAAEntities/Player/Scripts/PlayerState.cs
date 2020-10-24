@@ -18,15 +18,14 @@ namespace PlayerFSM
     {
         public override void Action(PlayerCharacter player)
         {
-            player.ManualMovement(player.input.MoveInput, player.transform.forward, player.transform.right, 0.5f);
+            player.ManualMovement(player.input.MoveInput, player.transform.forward, player.transform.right);
+            if (player.input.Jump)
+                player.Jump();
             player.Gravity();
             player.ApplyMovement();
 
             if (player.AttackAnimationFinished && player.CanAttack)
                 player.animator.WalkingAnimation(player.CanAttack && player.input.MoveInput.magnitude > 0 && player.IsNearGround());
-
-            //if (player.input.Attack)
-            //    player.MeleeAttack();
         }
 
         public override void Init(PlayerCharacter player)
@@ -36,7 +35,7 @@ namespace PlayerFSM
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (player.input.Dash && player.DashMeter >= 1)
+            if (player.input.Dash && player.DashMeter >= 0)
                 return new DashState();
             return null;
         }
@@ -46,10 +45,11 @@ namespace PlayerFSM
     {
         private float timeCounter = 0;
         private Vector3 dashDirection;
+        private float currentDashDuration;
 
         public override void Action(PlayerCharacter player)
         {
-            player.NonInertialMovement(dashDirection * player.dashSpeed);
+            player.NonInertialMovement(dashDirection * player.playerStats.dashSpeed);
             player.ManualRotation(player.input.CameraInput);
             player.ApplyMovement();
 
@@ -71,15 +71,17 @@ namespace PlayerFSM
             Vector3 forward = player.transform.forward;
             dashDirection = forward * moveInput.y + player.transform.right * moveInput.x;
 
+            currentDashDuration = player.playerStats.dashDuration * player.DashMeter;
+
             PlayerCamera.Recoil(20);
-            PlayerCamera.ScreenShake(player.dashDuration);
+            PlayerCamera.ScreenShake(currentDashDuration);
 
             player.animator.PlayDashSound();
         }
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (timeCounter < player.dashDuration)
+            if (timeCounter < currentDashDuration)
                 return null;
             PlayerCamera.Recoil();
             PlayerCamera.ScreenShake(0.2f);
@@ -103,9 +105,11 @@ namespace PlayerFSM
             if (player.input.Attack)
                 player.MeleeAttack();
 
-
             if (player.input.ForcePush)
                 player.ForcePush();
+
+            if (player.input.InspectWeapon)
+                player.InspectWeapon();
         }
 
         public override void Init(PlayerCharacter player)
@@ -119,8 +123,8 @@ namespace PlayerFSM
             {
                 if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Forward)
                     return new StingAttackStartState();
-                else if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Backwards)
-                    return new RevolverAttack();
+                else if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Backwards && player.CanUseRevolver())
+                    return new RevolverAttackStartState();
                 else if (player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Right || player.input.MoveInputDirection == PlayerInput.MovementInputDirection.Left)
                     return new SpinAttackStartState();
             }
@@ -129,36 +133,49 @@ namespace PlayerFSM
     }
 
     // Revolver Attack
-    public class RevolverAttack : PlayerState
+    public class RevolverAttackStartState : PlayerState
     {
-        public float timeCounter;
-
+        private float timeCounter;
+        private float chargeTime, chargeTimeCounter;
         public override void Action(PlayerCharacter player)
         {
             player.ManualRotation(player.input.CameraInput);
             timeCounter -= Time.deltaTime;
-            if(player.CanAttack && player.input.SpecialAttack)
-            {
-                player.RevolverAttack();
-                timeCounter = player.animator.revolverAttack.attackAnimationDuration;
-            }
+            chargeTimeCounter += Time.deltaTime;
+            player.SpecialAttackMeter = Mathf.Clamp(chargeTimeCounter / chargeTime, 0, 1);
         }
 
         public override void Init(PlayerCharacter player)
         {
-            timeCounter = player.animator.revolverAttack.attackAnimationDuration;
-            player.RevolverAttack();
+            player.RevolverAttackStart();
+            timeCounter = player.animator.revolverStartAnimationDuration;
+            chargeTime = player.playerStats.revolverAttackChargeTime;
         }
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (timeCounter <= 0)
+            if (timeCounter <= 0 && !player.input.SpecialAttack)
+                return new RevolverAttackEndState();
+            return null;
+        }
+    }
+
+    public class RevolverAttackEndState : PlayerState
+    {
+        public override void Action(PlayerCharacter player)
+        {
+            player.ManualRotation(player.input.CameraInput);
+        }
+
+        public override void Init(PlayerCharacter player)
+        {
+            player.RevolverAttackEnd();
+        }
+
+        public override PlayerState Transition(PlayerCharacter player)
+        {
+            if (player.CanAttack)
                 return new BasicAttackState();
-            if (player.CanAttack && player.input.Attack)
-            {
-                player.MeleeAttack();
-                return new BasicAttackState();
-            }
             return null;
         }
     }
@@ -181,7 +198,7 @@ namespace PlayerFSM
         {
             player.StingAttackStart();
             timeCounter = player.animator.stingStartAnimationDuration;
-            chargeTime = player.stingAttackChargeTime;
+            chargeTime = player.playerStats.stingAttackChargeTime;
         }
 
         public override PlayerState Transition(PlayerCharacter player)
@@ -230,7 +247,7 @@ namespace PlayerFSM
         {
             player.SpinAttackStart();
             timeCounter = player.animator.spinStartAnimationDuration;
-            chargeTime = player.spinAttackChargeTime;
+            chargeTime = player.playerStats.spinAttackChargeTime;
         }
 
         public override PlayerState Transition(PlayerCharacter player)

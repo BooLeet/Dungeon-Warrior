@@ -7,15 +7,19 @@ public abstract class PlayerInput : MonoBehaviour
     protected bool attack;
     protected bool specialAttack;
     protected bool interact;
+    protected bool jump;
     protected bool dash;
     protected bool forcePush;
     protected bool pause;
+    protected bool inspectWeapon;
     public bool Attack { get { return attack; } }
     public bool SpecialAttack { get { return specialAttack; } }
     public bool Interact { get { return interact; } }
+    public bool Jump { get { return jump; } }
     public bool Dash { get { return dash; } }
     public bool ForcePush { get { return forcePush; } }
     public bool Pause { get { return pause; } }
+    public bool InspectWeapon { get { return inspectWeapon; } }
 
     public Vector2 MoveInput { get; protected set; }
     public enum MovementInputDirection { Forward, Backwards, Right, Left, Null }

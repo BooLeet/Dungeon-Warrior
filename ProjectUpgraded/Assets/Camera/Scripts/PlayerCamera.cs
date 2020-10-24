@@ -6,6 +6,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public static PlayerCamera instance;
     public Camera cam;
+    public Camera UICam;
     public float defaultFov = 75;
     private float targetFov;
 

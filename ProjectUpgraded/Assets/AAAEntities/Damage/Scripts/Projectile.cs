@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour {
         return projectile;
     }
 
-	void Update () {
+	void LateUpdate () {
         if (currentLifeTime >= info.lifeTime)
             Destroy(gameObject);
 
@@ -35,28 +35,25 @@ public class Projectile : MonoBehaviour {
         float raycastDistance = info.speed * Time.deltaTime;
         currentLifeTime += Time.deltaTime;
 
-        //Ray collisionRay = new Ray(transform.position, transform.forward);
-        //if (Physics.Raycast(collisionRay, out hitInfo, raycastDistance))
+        //if (Physics.Raycast(new Ray(transform.position, transform.forward), out hitInfo, raycastDistance))
         if (Physics.SphereCast(transform.position, info.radius, transform.forward, out hitInfo, raycastDistance))
         {
             if(info.hitEffect)
-            {
                 Instantiate(info.hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-            }
 
             Entity entity = hitInfo.collider.GetComponent<Entity>();
             if(entity != sender)
             {
-                if (entity != null)
+                if (!entity)
+                    ProjectileDestruction();
+                else
                 {
                     currentPenetrations++;
                     Damage.SendDamageFeedback(sender, entity, entity.TakeDamage(damage, sender, transform.position));
 
                     if (currentPenetrations >= info.maxPenetrations)
                         ProjectileDestruction();
-                }
-                else
-                    ProjectileDestruction();
+                }    
             }
         }
 

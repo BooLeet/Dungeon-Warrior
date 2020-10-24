@@ -9,7 +9,7 @@ public class HUD_Health : MonoBehaviour {
 	void Update () {
         if(character)
         {
-            fill.fillAmount = character.CurrentHealth / character.maxHealth;
+            fill.fillAmount = character.CurrentHealth / character.GetMaxHealth();
             if(text)
                 text.text = ((int)character.CurrentHealth).ToString();
         }

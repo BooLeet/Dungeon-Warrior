@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactPoint: {fileID: 4468341189848198}
-  healAmount: 20
-  quafSound: {fileID: 8300000, guid: 022134a5a1fa7ab4d9299076fcc6eb34, type: 3}
+  healAmount: 13
+  quaffSound: {fileID: 8300000, guid: 022134a5a1fa7ab4d9299076fcc6eb34, type: 3}
 --- !u!1 &1959108647327856
 GameObject:
   m_ObjectHideFlags: 0

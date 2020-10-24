@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class SettingsMenuController : MonoBehaviour
 {
+    public MainMenuController mainMenuController;
     [Header("Graphics")]
-    public Toggle motionBlurToggle;
+    public Toggle bloomToggle;
     public Toggle filmGrainToggle;
     public Toggle AO_Toggle;
+    public Slider resolutionSlider;
+    public Slider frameRateSlider;
 
     [Header("Audio")]
     public Slider sfxVolumeSlider; 
@@ -27,14 +30,16 @@ public class SettingsMenuController : MonoBehaviour
     public void LoadGraphicsValues()
     {
         Settings.GraphicSettings graphicSettings = GameManager.instance.settings.graphicSettings;
-        motionBlurToggle.isOn = graphicSettings.motionBlur;
+        bloomToggle.isOn = graphicSettings.bloom;
         filmGrainToggle.isOn = graphicSettings.filmGrain;
         AO_Toggle.isOn = graphicSettings.AO;
+        resolutionSlider.value = graphicSettings.renderResolution;
+        frameRateSlider.value = graphicSettings.frameRate;
     }
 
     public void ApplyGraphicsSettings()
     {
-        GameManager.instance.settings.graphicSettings = new Settings.GraphicSettings(motionBlurToggle.isOn, filmGrainToggle.isOn, AO_Toggle.isOn, 4);
+        GameManager.instance.settings.graphicSettings = new Settings.GraphicSettings(bloomToggle.isOn, filmGrainToggle.isOn, AO_Toggle.isOn, (byte)resolutionSlider.value, (byte)frameRateSlider.value);
         GameManager.instance.settings.ApplyGraphicsSettings();
         SaveSettings();
     }
@@ -74,5 +79,6 @@ public class SettingsMenuController : MonoBehaviour
     public void SaveSettings()
     {
         SettingsLoader.SaveSettings(GameManager.instance.settings);
+        mainMenuController.GoBack();
     }
 }

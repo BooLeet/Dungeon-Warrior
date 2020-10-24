@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemiesPerHit: 2
   attackRange: 7
+  coneOffset: 1
   angle: 90

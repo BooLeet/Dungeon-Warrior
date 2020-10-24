@@ -5,7 +5,7 @@ using UnityEngine;
 public class UniqueLoot : Interactable {
     public LootScriptable lootScriptable;
 
-    public override void Interact(Character interactingCharacter)
+    protected override void _Interact(Character interactingCharacter)
     {
         if (interactingCharacter.inventory.AddLoot(lootScriptable))
             RemoveInteractable();

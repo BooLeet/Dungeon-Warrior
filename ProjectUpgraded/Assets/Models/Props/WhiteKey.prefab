@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33262556381316210}
   - component: {fileID: 23410412933442638}
   - component: {fileID: 65619712621914372}
-  - component: {fileID: 114753601064085994}
+  - component: {fileID: -654518229462666020}
   m_Layer: 0
   m_Name: WhiteKey
   m_TagString: Untagged
@@ -94,7 +94,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.6, y: 0.075, z: 0.22500001}
   m_Center: {x: 0, y: 0.0375, z: 0}
---- !u!114 &114753601064085994
+--- !u!114 &-654518229462666020
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,9 +103,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1994509654352676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 399b3a7967c63854c978f6757d5e03ff, type: 3}
+  m_Script: {fileID: 11500000, guid: c46ef908882889a4fa255be622cc9870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactPoint: {fileID: 4138697947855230}
-  canInteractWith: 1
   lootScriptable: {fileID: 11400000, guid: f018450319715444c8a47222e38b593b, type: 2}
+  resourceAmount: 1

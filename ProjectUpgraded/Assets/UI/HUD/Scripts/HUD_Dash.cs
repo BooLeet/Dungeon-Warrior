@@ -10,6 +10,6 @@ public class HUD_Dash : MonoBehaviour {
 	
 	void Update () {
         if(player)
-            fillImage.fillAmount = player.DashMeter / player.dashCapacity;
+            fillImage.fillAmount = player.DashMeter / player.playerStats.dashCapacity;
 	}
 }

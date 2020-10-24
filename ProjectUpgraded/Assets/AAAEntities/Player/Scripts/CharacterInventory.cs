@@ -40,6 +40,12 @@ public class CharacterInventory {
         resources.Add(new Resource(loot, amount));
     }
 
+    public int GetResourceCount(LootScriptable loot)
+    {
+        var tempQuery = GetResources(loot);
+        return tempQuery.Count() > 0 ? tempQuery.First().amount : 0;
+    }
+
     public bool HasResource(LootScriptable loot,int amount = 1)
     {
         var tempQuery = GetResources(loot);

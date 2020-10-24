@@ -12,13 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930b82cf2a69819498c2c5f11cd9711b, type: 3}
   m_Name: FleshGolemStats
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  alliance: 0
+  selfDamageMultiplier: 0
+  moveSpeed: 2
+  jumpVelocity: 12
+  gravityModifier: 3
   attackFunction: {fileID: 11400000, guid: 72dd325673027574f832a196eaeca55e, type: 2}
   attackTokenType: 3
-  attackDamage: 50
-  visibilityDistance: 100
+  attackDamage: 30
   attackDistance: 40
-  rapidMovementSpeed: 0
-  visibilityAngle: 90
   attackTokenCooldownTime: 2
   attacksPerToken: 1
+  visibilityDistance: 100
+  visibilityAngle: 180
+  rapidMovementSpeed: 0
   canBeStunned: 0
+  pushDurationMultiplier: 1
+  healthPerLevel: 10
+  moveSpeedPerLevel: 0.5
+  attackDamagePerLevel: 5

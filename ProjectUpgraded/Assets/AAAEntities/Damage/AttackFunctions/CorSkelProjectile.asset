@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CorSkelProjectile
   m_EditorClassIdentifier: 
   numberOfProjectiles: 1
-  spreadAngle: 20
+  spreadAngle: 10
   info:
     name: Projectile
     radius: 0.1

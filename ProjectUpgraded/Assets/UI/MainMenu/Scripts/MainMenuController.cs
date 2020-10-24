@@ -36,6 +36,8 @@ public class MainMenuController : MonoBehaviour
     public MainMenuState quit;
     [Space]
     public MainMenuState play;
+    public MainMenuState gameOver;
+    public GameOverText gameOverText;
     [Space]
     public MainMenuState settingsGraphics;
     public MainMenuState settingsAudio;
@@ -149,6 +151,13 @@ public class MainMenuController : MonoBehaviour
     public void ShowSettingsKeys()
     {
         PushState(settingsKeys);
+    }
+
+    // Game Over
+    public void ShowGameOver()
+    {
+        gameOverText.UpdateText();
+        PushState(gameOver);
     }
 
     // Quit

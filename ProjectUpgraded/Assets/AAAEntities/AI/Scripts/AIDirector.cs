@@ -120,4 +120,13 @@ public class AIDirector : MonoBehaviour {
                 ai.Alarm(enemyCharacter);
                 
     }
+
+    public IEnumerable<AICharacter> GetClosestAI(Vector3 position, float distance)
+    {
+        //ClearDestroyedObjects();
+
+        return from ai in aICharacters
+               where Vector3.Distance(position, ai.Position) <= distance
+               select ai;
+    }
 }

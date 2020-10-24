@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class KeyboardInput : PlayerInput {
+    public bool attackHold = true;
     public string attackKey = "mouse 0";
     public string specialAttackKey = "mouse 1";
     public string interactKey = "e";
+    public string jumpKey = "space";
     public string dashKey = "left shift";
     public string forcePushKey = "c";
     public string pauseKey = "escape";
+    public string inspectKey = "f";
     [Space]
     public string moveHorizontalAxis = "Horizontal";
     public string moveVerticalAxis = "Vertical";
@@ -16,17 +19,19 @@ public class KeyboardInput : PlayerInput {
     public string cameraHorizontalAxis = "Mouse X";
     public string cameraVerticalAxis = "Mouse Y";
     public float keyPressValidTime = 0.1f;
-    private float attackTimeCounter, interactTimeCounter, forcePushTimeCounter;
+    private float attackTimeCounter, jumpTimeCounter, forcePushTimeCounter, interactTimeCounter;
 
     public override void UpdateValues()
     {
         pause = Input.GetKeyDown(pauseKey);
 
-        StickyInput(ref attackTimeCounter, ref attack, Input.GetKeyDown(attackKey));
+        StickyInput(ref attackTimeCounter, ref attack, attackHold? Input.GetKey(attackKey) : Input.GetKeyDown(attackKey));
         StickyInput(ref forcePushTimeCounter, ref forcePush, Input.GetKeyDown(forcePushKey));
-        interact = Input.GetKeyUp(interactKey);
+        StickyInput(ref jumpTimeCounter, ref jump, Input.GetKeyDown(jumpKey));
+        StickyInput(ref interactTimeCounter, ref interact, Input.GetKeyDown(interactKey));
         dash = Input.GetKeyDown(dashKey);
         specialAttack = Input.GetKey(specialAttackKey);
+        inspectWeapon = Input.GetKeyDown(inspectKey);
 
         MoveInput = new Vector2(Input.GetAxisRaw(moveHorizontalAxis), Input.GetAxisRaw(moveVerticalAxis));
         if (MoveInput.magnitude > 1)

@@ -9,4 +9,6 @@ public class CharacterSpawner : MonoBehaviour {
         Instantiate(prefab, transform.position, transform.rotation);
         Destroy(gameObject);
 	}
+
+    
 }

@@ -16,12 +16,12 @@ MonoBehaviour:
   spreadAngle: 0
   info:
     name: Projectile
-    radius: 0.1
-    speed: 150
+    radius: 0.5
+    speed: 75
     lifeTime: 1
     maxPenetrations: 3
     onHit:
       onHitFunctors: []
     model: {fileID: 1664740601458906, guid: adccb885e4768ce479568ef2323cd4e0, type: 3}
-    hitEffect: {fileID: 1706171305083330, guid: f6f438978ef624f4495335ecb9512aae,
+    hitEffect: {fileID: 1706171305083330, guid: 54ad857fc32b26f43973cbffbf6722c6,
       type: 3}

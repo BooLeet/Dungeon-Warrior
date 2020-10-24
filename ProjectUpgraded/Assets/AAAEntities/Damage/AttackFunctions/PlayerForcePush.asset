@@ -3,8 +3,9 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -12,10 +13,14 @@ MonoBehaviour:
   m_Name: PlayerForcePush
   m_EditorClassIdentifier: 
   enemyLayer: 9
-  pushDuration: 0.5
+  pushDuration: 0.75
   pushSpeed: 30
   stunDuration: 3
   enemiesPerHit: 1
-  attackRange: 7
+  attackRange: 8
   deadlyObjectRange: 30
-  angle: 90
+  angle: 180
+  effectPrefab: {fileID: 1706171305083330, guid: 6ab92c23551ecbf469b2f4011763b8b7,
+    type: 3}
+  speedEffectPrefab: {fileID: 1353460970805822, guid: 41267f5cbfa8f6046871609ea21e197f,
+    type: 3}

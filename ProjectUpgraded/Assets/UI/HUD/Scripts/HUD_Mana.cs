@@ -11,7 +11,7 @@ public class HUD_Mana : MonoBehaviour
     {
         if (player)
         {
-            fill.fillAmount = player.CurrentMana > 0 ? player.CurrentMana / player.maxMana : 0;
+            fill.fillAmount = player.CurrentMana > 0 ? player.CurrentMana / player.playerStats.maxMana : 0;
             if (text)
                 text.text = ((int)player.CurrentMana).ToString();
         }

@@ -6,10 +6,8 @@ using UnityEngine;
 public class DelveRoomSet : ScriptableObject
 {
     public DelveRoom startRoom;
+    public DelveRoom merchantRoom;
     public DelveRoom[] easy;
     public DelveRoom[] medium;
     public DelveRoom[] hard;
-    [Space]
-    public DelveRoom[] smallLoot;
-    public DelveRoom[] bigLoot;
 }

@@ -45,13 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7585ced847b17804cb6b8a17697bfc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  languagePack: {fileID: 11400000, guid: ec5612d02282fa94c894bc9592de2f9d, type: 2}
+  languagePack: {fileID: 11400000, guid: 7c69bbc16826f26489d0b8f709e253f1, type: 2}
   settings:
     graphicSettings:
-      motionBlur: 0
+      bloom: 0
       filmGrain: 0
       AO: 0
-      shadowQuality: 0
+      renderResolution: 4
+      frameRate: 2
     audioSettings:
       sfxVolume: 0
       musicVolume: 0
@@ -60,8 +61,11 @@ MonoBehaviour:
       showReticule: 0
   postProcess:
   - {fileID: 8092096573055176273}
+  resolutionScaler: {fileID: 0}
   sfxMixer: {fileID: 24100000, guid: 27ad595d35542c44ebfc8af7919023b1, type: 2}
   musicMixer: {fileID: 24100000, guid: b421d18085f728341a156a834927547e, type: 2}
+  hud: {fileID: 0}
+  mobileInputController: {fileID: 0}
 --- !u!114 &4837039864908428415
 MonoBehaviour:
   m_ObjectHideFlags: 0

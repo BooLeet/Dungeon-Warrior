@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &127160494698182602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6337851855010478477}
+  m_Layer: 0
+  m_Name: Head
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6337851855010478477
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127160494698182602}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6083568917423864315}
+  m_Father: {fileID: 6085295950488388225}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &540402330877117077
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +226,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086618926645444529}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0.01, z: 0}
+  m_LocalPosition: {x: 5, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6083515455610426659}
@@ -229,7 +260,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086656990731852341}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -1, z: 0}
+  m_LocalPosition: {x: 2, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6083548703765730739}
@@ -308,11 +339,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086683066566056835}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 6085295950488388225}
-  m_RootOrder: 2
+  m_Father: {fileID: 6337851855010478477}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6055648788890235101
 MeshFilter:
@@ -385,7 +416,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086776041341802513}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6, y: 0.01, z: 0}
+  m_LocalPosition: {x: -5, y: 0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6085230320945850435}
@@ -559,7 +590,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6086991408625301803}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: -0.01, z: 0}
+  m_LocalPosition: {x: -5, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6083684750298696503}
@@ -703,7 +734,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087174348728614945}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: -0.01, z: 0}
+  m_LocalPosition: {x: 5, y: -0.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6083562393870258049}
@@ -737,7 +768,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6087261439806678249}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: -1, z: 0}
+  m_LocalPosition: {x: -2, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6083516182648335359}
@@ -1059,7 +1090,7 @@ Transform:
   m_Children:
   - {fileID: 6085440996212757425}
   - {fileID: 6083382053639219353}
-  - {fileID: 6083568917423864315}
+  - {fileID: 6337851855010478477}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1112,14 +1143,16 @@ MonoBehaviour:
     attackAnimationDuration: 1
     damageSource: {fileID: 6085295950488388225}
     attackEffectPrefab: {fileID: 0}
+  revolverStartTrigger: RevolverStart
+  revolverStartAnimationDuration: 0.25
   revolverAttack:
     attackSound: {fileID: 8300000, guid: 37e89318e378f374aa3a6463d6cc7093, type: 3}
     attackTriggers:
-    - Revolver
+    - RevolverEnd
     attackDamageDelay: 0
-    attackDuration: 0.33333334
-    attackAnimationDuration: 0.9166667
-    damageSource: {fileID: 7767487798326650196}
+    attackDuration: 0.5
+    attackAnimationDuration: 0.5
+    damageSource: {fileID: 6085295950488388225}
     attackEffectPrefab: {fileID: 1706171305083330, guid: 02d8aa8a7cb0ae8439efa5f21fbdc102,
       type: 3}
   stingStartTrigger: StingStart
@@ -1136,15 +1169,15 @@ MonoBehaviour:
   spinStartTrigger: SpinStart
   spinEndTrigger: SpinEnd
   spinStartAnimationDuration: 0.25
-  spinEndAnimationDuration: 0.5833333
+  spinEndAnimationDuration: 0.24999994
   dashSound: {fileID: 8300000, guid: 2bd194e93cadc02438e203e16d0fa1dc, type: 3}
   forcePush:
     attackSound: {fileID: 8300000, guid: bcccdbf1fe621db42a6ab2e732f75f38, type: 3}
     attackTriggers:
     - ForcePush
-    attackDamageDelay: 0.21666667
-    attackDuration: 0.5833333
-    attackAnimationDuration: 1
+    attackDamageDelay: 0
+    attackDuration: 0.33333334
+    attackAnimationDuration: 0.8333333
     damageSource: {fileID: 6085295950488388225}
     attackEffectPrefab: {fileID: 0}
   forcePull:
@@ -1156,6 +1189,9 @@ MonoBehaviour:
     attackAnimationDuration: 1
     damageSource: {fileID: 6085295950488388225}
     attackEffectPrefab: {fileID: 0}
+  deathTrigger: Death
+  meleeWeaponSlot: {fileID: 6083562393870258049}
+  weaponScale: 10
 --- !u!114 &1016228930228646329
 MonoBehaviour:
   m_ObjectHideFlags: 0

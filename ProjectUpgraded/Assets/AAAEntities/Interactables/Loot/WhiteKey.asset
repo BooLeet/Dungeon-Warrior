@@ -3,12 +3,14 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49c2d0a55ccc8924d8fc3c9c11b95db7, type: 3}
   m_Name: WhiteKey
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 2800000, guid: 747b9a69df5865d42a41765e1d796337, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}

@@ -7,6 +7,9 @@ using PlayerFSM;
 public class PlayerCharacter : Character
 {
     public static PlayerCharacter instance;
+    [Header("Stats")]
+    public PlayerStats playerStats;
+
     [Header("References")]
     public PlayerInput input;
     public PlayerCharacterAnimator animator;
@@ -19,7 +22,6 @@ public class PlayerCharacter : Character
 
     
     [Header("Rotation")]
-    public float cameraSensitivity = 1;
     private bool enableManualRotation = true;
     public float verticalRotationSpeedMultiplier = 1;
     [Range(0, 90)]
@@ -28,95 +30,31 @@ public class PlayerCharacter : Character
     public float knockBackLerpParameter = 5;
     private float knockBackVerticalAngle = 0;
 
-    [Header("Melee Attack")]
-    public AttackFunction meleeAttackFunction;
-    public float meleeAttackDamage = 30;
-    public float meleeAttackHeadKnockBackAngle = 2;
-    [Space]
-    public float targetingRaycastRange = 25;
+    public bool EnableInput { get; set; }
     public float SpecialAttackMeter { get; set; }
-
-    [Header("Revolver Attack")]
-    public AttackFunction revolverAttackFunction;
-    public float revolverAttackDamage = 30;
-    public float revolverAttackHeadKnockBackAngle = 2;
-
-    [Header("Damage bonus mechanic")]
-    public float damageBonusMaxMultiplier = 5f;
-    public float damageBonusSegmentSize = 0.1f;
-    public float DamageBonusCurrentMultiplier { get;private set; } 
-    public float damageBonusIncrement = 0.5f;
-    public int damageBonusFullIncrementHitCount = 3;
-    public int damageBonusHalfIncrementHitCount = 5;
-    [Space]
-    public float damageBonusDecayPerSecond = 0.2f;
-    public float damageBonusDecayDelay = 1.5f;
-    private float damageBonusTimeCounter = 0;
-    public enum AttackType { Basic, Revolver, Push, Sting, Spin, Null}
-    private AttackType currentAttackType = AttackType.Basic;
-    private AttackType previousAttackType = AttackType.Basic;
-    private int sameAttackTypeCount = 0;
-    
-    [Header("Sting Attack")]
-    public AttackFunction stingAttackFunction;
-    public Vector2 stingAttackDmgMultiplier = new Vector2(1.5f,4f);
-    public float stingAttackHeadKnockBackAngle = 2;
-    public float stingAttackChargeTime = 3;
-
-    [Header("Spin Attack")]
-    public float spinAttackRange = 10;
-    public Vector2 spinAttackDmgMultiplier = new Vector2(1.5f, 4f);
-    public float spinAttackChargeTime = 3;
-
-
-    [Header("Aim Assist")]
-    public bool enableAimAssist = true;
-    public float aimAssistAngle = 45;
-    public float aimAssistDistance = 40;
-    public Entity AimAssistedEntity { get; private set; }
-
     public bool CanAttack { get; private set; }
     private float attackAnimationTimeLeft = 0;
     public bool AttackAnimationFinished { get { return attackAnimationTimeLeft <= 0; } }
     private Transform attackSource;
 
-    public bool EnableInput { get; set; }
-    [Header("Mana")]
-    public float maxMana = 100;
-    public float manaRegenPerSecond = 5;
+    
+    public Entity AimAssistedEntity { get; private set; }
+
     public float CurrentMana { get; private set; }
 
-    [Header("Force Push")]
-    public AttackFunction forcePushAttackFunction;
-    public float forcePushManaCost = 20;
-
-    [Header("Interaction And Pulling")]
-    public float interactionDistance = 5;
-    public float interactionAngle = 30;
-    [Space]
-    public float pullingDistance = 20;
-    public float pullingSpeed = 30;
-    public float pullingStunTime = 3;
-    [Space]
-    public float forcePullManaCost = 20;
-    public Interactable CurrentInteractable;// { get; private set; }
+    public Interactable CurrentInteractable { get; private set; }
     
-
-    [Header("Dash")]
-    public float dashSpeed = 30;
-    public float dashDuration = 0.3f;
-    public byte dashCapacity = 2;
-    public float dashCooldownTime = 1;
-    [Range(60, 90)]
-    public float dashInversionMinAngle = 70;
     public float DashMeter { get; private set; }
-
 
     //FSM
     private PlayerState currentMovementState;
     private PlayerState currentCombatState;
     public string currentMovementStateName;
     public string currentCombatStateName;
+
+    [Header("Death Effect")]
+    public float deathEffectDuration = 1.5f;
+    private Entity lastDamageGiver = null;
 
     protected override void ControllerStart()
     {
@@ -133,17 +71,21 @@ public class PlayerCharacter : Character
         EnableInput = true;
         CanAttack = true;
 
-        CurrentMana = maxMana;
+        CurrentMana = playerStats.maxMana;
 
-        DashMeter = dashCapacity;
-        DamageBonusCurrentMultiplier = 0;
+        DashMeter = playerStats.dashCapacity;
 
         currentMovementState = new DirectMovementState();
         currentCombatState = new BasicAttackState();
+
+        animator.EquipMeleeWeapon(playerStats.startingMeleeWeapon);
     }
 
     protected override void ControllerUpdate()
     {
+        if (IsDead)
+            return;
+
         if (GameManager.instance.IsPaused)
             return;
         input.UpdateValues();
@@ -156,7 +98,6 @@ public class PlayerCharacter : Character
         currentMovementStateName = currentMovementState.ToString();
         currentCombatStateName = currentCombatState.ToString();
 
-        DamageBonusDecayHandler();
         AttackAnimationFinishedUpdate();
         UpdateAimAssist();
         HeadKnockBackUpdate();
@@ -177,14 +118,6 @@ public class PlayerCharacter : Character
 
     #region Misc Public Methods
 
-    public void Warp(Vector3 position)
-    {
-        //ResetInertia();
-        controller.enabled = false;
-        transform.position = position;
-        navAgent.Warp(position);
-        controller.enabled = true;
-    }
 
     public void PauseHandler()
     {
@@ -199,6 +132,8 @@ public class PlayerCharacter : Character
     public void DeduceDashMeter()
     {
         --DashMeter;
+        if (DashMeter < 0)
+            DashMeter = 0;
     }
     #endregion
 
@@ -208,6 +143,8 @@ public class PlayerCharacter : Character
     {
         if (!enableManualRotation)
             return;
+
+        float cameraSensitivity = GameManager.instance.settings.gameSettings.mouseSensitivity;
 
         float vertical = rotationVector.y * cameraSensitivity * verticalRotationSpeedMultiplier;
         verticalAimAngle = Mathf.Clamp(verticalAimAngle - vertical, -maxVerticalRotationAngle, maxVerticalRotationAngle);
@@ -230,32 +167,26 @@ public class PlayerCharacter : Character
             return;
         attackSource = animator.meleeAttack.damageSource;
 
-        currentAttackType = AttackType.Basic;
-        StartCoroutine(AttackRoutine(animator.meleeAttack.attackDamageDelay, animator.meleeAttack.attackDuration, animator.meleeAttack.attackAnimationDuration, meleeAttackFunction, animator.MeleeAttack, GetDamageBonusMultiplier() * meleeAttackDamage, meleeAttackHeadKnockBackAngle));
+        StartCoroutine(AttackRoutine(animator.meleeAttack.attackDamageDelay, animator.meleeAttack.attackDuration, animator.meleeAttack.attackAnimationDuration,
+            playerStats.meleeAttackFunction, animator.MeleeAttack, playerStats.meleeAttackDamage, playerStats.meleeAttackHeadKnockBackAngle));
     }
 
-    public void RevolverAttack()
+    public bool CanUseRevolver()
     {
-        if (!CanAttack)
-            return;
-        attackSource = animator.revolverAttack.damageSource;
-
-        currentAttackType = AttackType.Revolver;
-        StartCoroutine(AttackRoutine(animator.revolverAttack.attackDamageDelay, animator.revolverAttack.attackDuration, animator.revolverAttack.attackAnimationDuration, revolverAttackFunction, animator.RevolverAttack, GetDamageBonusMultiplier() * revolverAttackDamage, revolverAttackHeadKnockBackAngle));
+        return inventory.HasResource(playerStats.revolverResource);
     }
-
     public void ForcePush()
     {
         if (!CanAttack || !ManaAvailable())
             return;
         attackSource = animator.meleeAttack.damageSource;
         
-        currentAttackType = AttackType.Push;
-        SpendMana(forcePushManaCost);
-        StartCoroutine(AttackRoutine(animator.forcePush.attackDamageDelay, animator.forcePush.attackDuration, animator.forcePush.attackAnimationDuration, forcePushAttackFunction, animator.ForcePush, GetDamageBonusMultiplier() * meleeAttackDamage, meleeAttackHeadKnockBackAngle));
+        SpendMana(playerStats.forcePushManaCost);
+        StartCoroutine(AttackRoutine(animator.forcePush.attackDamageDelay, animator.forcePush.attackDuration, animator.forcePush.attackAnimationDuration,
+            playerStats.forcePushAttackFunction, animator.ForcePush, playerStats.meleeAttackDamage, playerStats.meleeAttackHeadKnockBackAngle));
     }
 
-    private IEnumerator AttackRoutine(float attackDamageDelay, float attackDuration, float attackAnimationDuration, AttackFunction attackFunction, Utility.VoidFunction animationCall, float damage, float headKnockBackAngle = 0)
+    private IEnumerator AttackRoutine(float attackDamageDelay, float attackDuration, float attackAnimationDuration, AttackFunction attackFunction, Utility.VoidFunction animationCall, float damage, float headKnockBackAngle = 0,bool shakeScreen = true)
     {
         if (attackDamageDelay > attackDuration || attackDuration > attackAnimationDuration)
             Debug.LogError("attackDamageDelay > attackDuration isn't permitted");
@@ -269,12 +200,13 @@ public class PlayerCharacter : Character
         animationCall();
         yield return new WaitForSeconds(attackDamageDelay);
 
-
-        PlayerCamera.ScreenShake(0.2f, Position);
+        if(shakeScreen)
+            PlayerCamera.ScreenShake(0.2f, Position);
         //PlayerCamera.Recoil();
         HeadKnockBack(headKnockBackAngle);
         // Do damage
-        attackFunction.DoAttackDamage(this, damage);
+        if(attackFunction)
+            attackFunction.DoAttackDamage(this, damage);
 
         yield return new WaitForSeconds(attackDuration - attackDamageDelay);
         CanAttack = true;
@@ -293,11 +225,11 @@ public class PlayerCharacter : Character
     private void UpdateAimAssist()
     {
         AimAssistedEntity = null;
-        if (enableAimAssist)
+        if (playerStats.enableAimAssist)
         {
-            var enemiesInRange = from entity in EntityRegistry.GetInstance().GetClosestEntities(Position, aimAssistDistance, this)
-                                 where Utility.IsVisible(playerCamera.transform.position, entity.gameObject, aimAssistDistance, entity.verticalTargetingOffset)
-                                 && Utility.WithinAngle(playerCamera.transform.position, playerCamera.transform.forward, entity.Position, aimAssistAngle)
+            var enemiesInRange = from entity in EntityRegistry.GetInstance().GetClosestEntities(Position, playerStats.aimAssistDistance, this)
+                                 where Utility.IsVisible(playerCamera.transform.position, entity.gameObject, playerStats.aimAssistDistance, entity.verticalTargetingOffset)
+                                 && Utility.WithinAngle(playerCamera.transform.position, playerCamera.transform.forward, entity.Position, playerStats.aimAssistAngle)
                                  select new { entity, distanceFromCameraCenter = playerCamera.DistanceFromTheCenter(entity.Position) };
 
             IEnumerable<Entity> closestEntitiesToCenter = from entityInfo in enemiesInRange
@@ -326,9 +258,14 @@ public class PlayerCharacter : Character
         Ray ray = new Ray(cameraTransform.position, forward);
         RaycastHit hitInfo;
 
-        Vector3 hitPosition = cameraTransform.position + forward * targetingRaycastRange;
-        if (Physics.Raycast(ray, out hitInfo, targetingRaycastRange))
+        Vector3 hitPosition = cameraTransform.position + forward * playerStats.targetingRaycastRange;
+        int layermask = ~(1 << gameObject.layer);
+        if (Physics.Raycast(ray, out hitInfo, playerStats.targetingRaycastRange,layermask))
+        {
+            if (hitInfo.collider.GetComponent<PlayerCharacter>())
+                Debug.LogError("PLAYER CHARACTER ??! 0_o");
             hitPosition = hitInfo.point;
+        }
 
         return (hitPosition - GetAttackSource()).normalized;
     }
@@ -356,11 +293,31 @@ public class PlayerCharacter : Character
     public void StingAttackEnd()
     {
         attackSource = animator.meleeAttack.damageSource;
-        float damageMultiplier = GetDamageBonusMultiplier() * Mathf.Lerp(stingAttackDmgMultiplier.x, stingAttackDmgMultiplier.y, SpecialAttackMeter);
+        float damageMultiplier = Mathf.Lerp(playerStats.stingAttackDmgMultiplier.x, playerStats.stingAttackDmgMultiplier.y, SpecialAttackMeter);
         SpecialAttackMeter = 0;
 
-        currentAttackType = AttackType.Sting;
-        StartCoroutine(AttackRoutine(animator.stingEndAnimation.attackDamageDelay, animator.stingEndAnimation.attackDuration, animator.stingEndAnimation.attackAnimationDuration, stingAttackFunction, animator.StingAttackEnd, meleeAttackDamage * damageMultiplier, meleeAttackHeadKnockBackAngle));
+        StartCoroutine(AttackRoutine(animator.stingEndAnimation.attackDamageDelay, animator.stingEndAnimation.attackDuration,
+            animator.stingEndAnimation.attackAnimationDuration, playerStats.stingAttackFunction, animator.StingAttackEnd, playerStats.meleeAttackDamage * damageMultiplier,
+            playerStats.meleeAttackHeadKnockBackAngle));
+    }
+    #endregion
+
+    #region Revolver
+    public void RevolverAttackStart()
+    {
+        CanAttack = false;
+        animator.RevolverAttackStart();
+    }
+
+    public void RevolverAttackEnd()
+    {
+        attackSource = animator.revolverAttack.damageSource;
+        float damageMultiplier = Mathf.Lerp(playerStats.revolverAttackDmgMultiplier.x, playerStats.revolverAttackDmgMultiplier.y, SpecialAttackMeter);
+        SpecialAttackMeter = 0;
+        inventory.SpendResource(playerStats.revolverResource);
+
+        StartCoroutine(AttackRoutine(animator.revolverAttack.attackDamageDelay, animator.revolverAttack.attackDuration, animator.revolverAttack.attackAnimationDuration,
+            playerStats.revolverAttackFunction, animator.RevolverAttackEnd, playerStats.revolverAttackDamage * damageMultiplier, playerStats.revolverAttackHeadKnockBackAngle));
     }
     #endregion
 
@@ -374,11 +331,10 @@ public class PlayerCharacter : Character
     public void SpinAttackEnd()
     {
         attackSource = animator.meleeAttack.damageSource;
-        float damageMultiplier = GetDamageBonusMultiplier() * Mathf.Lerp(spinAttackDmgMultiplier.x, stingAttackDmgMultiplier.y, SpecialAttackMeter);
+        float damageMultiplier = Mathf.Lerp(playerStats.spinAttackDmgMultiplier.x, playerStats.spinAttackDmgMultiplier.y, SpecialAttackMeter);
         SpecialAttackMeter = 0;
 
-        currentAttackType = AttackType.Spin;
-        StartCoroutine(SpinAttackRoutine(meleeAttackDamage * damageMultiplier));
+        StartCoroutine(SpinAttackRoutine(playerStats.meleeAttackDamage * damageMultiplier));
     }
 
     private IEnumerator SpinAttackRoutine(float damage, float enertiaEffectDuration = 0.5f, float enertiaEffectMagnitude = 30f)
@@ -390,24 +346,42 @@ public class PlayerCharacter : Character
         head.localRotation = Quaternion.identity;
         Vector3 upVector = head.transform.up;
         enableManualRotation = false;
-        Entity previousEntity = null;
+        //Entity previousEntity = null;
         attackAnimationTimeLeft = animator.spinEndAnimationDuration + enertiaEffectDuration;
 
         PlayerCamera.ScreenShake(animator.spinEndAnimationDuration, Position);
-
+        bool damageDone = false;
         while (timeCounter > 0)
         {
-            RaycastHit rayHit;
-
-            if(Physics.SphereCast(head.position,1,head.forward,out rayHit,spinAttackRange))
+            if (timeCounter <= animator.spinEndAnimationDuration / 2 && !damageDone)
             {
-                Entity hitEntity = rayHit.collider.GetComponent<Entity>();
-                if (hitEntity != null && hitEntity != previousEntity)
+                damageDone = true;
+                var closestEntities = EntityRegistry.GetInstance().GetClosestEntities(head.position, playerStats.spinAttackRange, this);
+                foreach (Entity entity in closestEntities)
                 {
-                    Damage.SendDamageFeedback(this, hitEntity, hitEntity.TakeDamage(damage, this, attackSource.position));
-                    previousEntity = hitEntity;
+                    if (Utility.IsVisible(head.position, entity.gameObject, playerStats.spinAttackRange, entity.verticalTargetingOffset))
+                        Damage.SendDamageFeedback(this, entity, entity.TakeDamage(damage, this, attackSource.position));
                 }
+
             }
+
+            //RaycastHit rayHit;
+            //float sphereCastDistance  = spinAttackRange;
+
+            //if (Physics.Raycast(new Ray(head.position, head.forward), out rayHit, spinAttackRange))
+            //{
+            //    sphereCastDistance = rayHit.distance;
+            //}
+
+            //if(Physics.SphereCast(head.position,1,head.forward,out rayHit, sphereCastDistance))
+            //{
+            //    Entity hitEntity = rayHit.collider.GetComponent<Entity>();
+            //    if (hitEntity != null && hitEntity != previousEntity)
+            //    {
+            //        Damage.SendDamageFeedback(this, hitEntity, hitEntity.TakeDamage(damage, this, attackSource.position));
+            //        previousEntity = hitEntity;
+            //    }
+            //}
 
             head.Rotate(upVector, 360 * Time.deltaTime / animator.spinEndAnimationDuration);
             timeCounter -= Time.deltaTime;
@@ -432,81 +406,33 @@ public class PlayerCharacter : Character
 
     private void DashCooldown()
     {
-        DashMeter += Time.deltaTime * 1 / dashCooldownTime;
-        DashMeter = Mathf.Clamp(DashMeter, 0, dashCapacity);
+        DashMeter += Time.deltaTime * 1 / playerStats.dashCooldownTime;
+        DashMeter = Mathf.Clamp(DashMeter, 0, playerStats.dashCapacity);
     }
 
     #endregion
 
-    #region Damage Bonus Mechanic
-    public float GetDamageBonusMultiplier()
-    {
-        return 1 + (DamageBonusCurrentMultiplier - DamageBonusCurrentMultiplier % damageBonusSegmentSize);
-    }
-
-    private void DamageBonusOnEnemyHit()
-    {
-        if (currentAttackType == previousAttackType)
-            ++sameAttackTypeCount;
-        else
-            sameAttackTypeCount = 1;
-
-        previousAttackType = currentAttackType;
-        float damageBonus = 0;
-        if (sameAttackTypeCount <= damageBonusFullIncrementHitCount)
-            damageBonus = damageBonusIncrement;
-        else if (sameAttackTypeCount <= damageBonusHalfIncrementHitCount)
-            damageBonus = damageBonusIncrement / 2;
-
-        damageBonusTimeCounter = damageBonusDecayDelay;
-
-        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier + damageBonus, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
-    }
-
-    private void DamageBonusOnPlayerHit()
-    {
-        DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - damageBonusIncrement / 2, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
-    }
-
-    private void DamageBonusDecayHandler()
-    {
-        if (damageBonusTimeCounter > 0)
-            damageBonusTimeCounter -= Time.deltaTime;
-        else
-            DamageBonusCurrentMultiplier = Mathf.Clamp(DamageBonusCurrentMultiplier - Time.deltaTime * damageBonusDecayPerSecond, 0, damageBonusMaxMultiplier + 1 - 0.0001f);
-    }
-
-    #endregion
-
-    #region Interaction And Pulling
-
-    // Tells character to interact with a current interactable
+    #region Interaction
+    /// <summary>
+    /// Tells character to interact with a current interactable
+    /// </summary>
     public void Interact()
     {
         if (!CurrentInteractable)
             return;
 
-        float distance = Vector3.Distance(head.position, CurrentInteractable.ButtonPosition);
-        if (distance <= interactionDistance)
-        {
-            CurrentInteractable.Interact(this);
-            return;
-        }
-        
-        Pullable pullable = CurrentInteractable as Pullable;
-        if (pullable)
-            Pull(pullable);
+        CurrentInteractable.Interact(this);
     }
 
     private void UpdateInteractable()
     {
-        IEnumerable<Interactable> closest = InteractableRegistry.GetInstance().GetClosestInteractables(Position, pullingDistance);
+        IEnumerable<Interactable> closest = InteractableRegistry.GetInstance().GetClosestInteractables(Position, playerStats.interactionDistance);
 
 
-        
+
         var inter = from interactable in closest
-                    where Utility.WithinAngle(head.position, head.forward, interactable.ButtonPosition, interactionAngle)
-                    && Utility.IsVisible(head.position, interactable.gameObject, pullingDistance + 1,(interactable.ButtonPosition - interactable.gameObject.transform.position).y)
+                    where Utility.WithinAngle(head.position, head.forward, interactable.ButtonPosition, playerStats.interactionAngle)
+                    && Utility.IsVisible(head.position, interactable.gameObject, playerStats.interactionDistance + 1,(interactable.ButtonPosition - interactable.gameObject.transform.position).y)
                     select new { interactable, direcionalDistance = Vector3.Distance(head.forward, (interactable.ButtonPosition - head.position).normalized) };
 
         var temp = from x in inter
@@ -516,40 +442,29 @@ public class PlayerCharacter : Character
         CurrentInteractable = temp.Count() > 0 ? temp.First() : null;
     }
 
-    private void Pull(Pullable pullable)
-    {
-        if (CanAttack && ManaAvailable())
-            StartCoroutine(PullRoutine(pullable));
-    }
-
-    private IEnumerator PullRoutine(Pullable pullable)
-    {
-        CanAttack = false;
-        attackAnimationTimeLeft = animator.forcePull.attackAnimationDuration;
-        animator.ResetWalkingAnimation();
-        animator.ForcePull();
-        yield return new WaitForSeconds(animator.forcePull.attackDamageDelay);
-
-        PlayerCamera.ScreenShake(0.2f, Position);
-        PlayerCamera.Recoil();
-
-        AICharacter ai = pullable.gameObject.GetComponent<AICharacter>();
-        if(ai)
-        {
-            ai.Stun(pullingStunTime, this);
-            SpendMana(forcePullManaCost);
-        }
-
-        pullable.Pull(this, head.position + transform.forward * interactionDistance, pullingSpeed);
-        
-        yield return new WaitForSeconds(animator.forcePull.attackDuration - animator.forcePull.attackDamageDelay);
-
-        CanAttack = true;
-    }
-
     #endregion
 
     #region Overrides
+    public override CharacterStats GetCharacterStats()
+    {
+        return playerStats;
+    }
+
+    public override float GetMaxHealth()
+    {
+        return playerStats.maxHealth;
+    }
+
+    protected override float GetMoveSpeed()
+    {
+        return playerStats.moveSpeed;
+    }
+
+    public override float GetInAirSpeed()
+    {
+        return 0;
+    }
+
     public override void DamageFeedback(Entity damagedEntity,DamageOutcome damageOutcome)
     {
         if (damagedEntity == this)
@@ -564,9 +479,6 @@ public class PlayerCharacter : Character
             case DamageOutcome.Hit:
                 hud.hitmarker.Hitmarker(); break;
         }
-
-        // Damage bonus handling
-        DamageBonusOnEnemyHit();
     }
 
     protected override void OnDamageTaken(float rawDamage, Entity damageGiver, Vector3 sourcePosition)
@@ -574,15 +486,46 @@ public class PlayerCharacter : Character
         if (rawDamage == 0)
             return;
 
+        lastDamageGiver = damageGiver;
+        GameMode.gameModeInstance.OnPlayerDamaged(rawDamage);
         hud.DamageIndicator(sourcePosition, this);
         HeadKnockBack(1);
         PlayerCamera.ScreenShake(0.2f);
-        DamageBonusOnPlayerHit();
     }
 
     protected override void DeathEffect()
     {
-        //GameMode.instance.PlayerDeath();
+        animator.PlayDeathAnimation();
+        hud.ShowHide(false);
+        StartCoroutine(DeathEffectRoutine());
+        GameMode.gameModeInstance.OnPlayerDeath();
+
+        Utility.EnableCursor();
+        menuController.EnableMenu();
+        menuController.ShowGameOver();
+    }
+
+    private IEnumerator DeathEffectRoutine()
+    {
+        float timeCounter = 0;
+        Vector3 accelerationDirection = Vector3.up;
+        Vector3 floorPosition = transform.position + Vector3.up * 0.3f;
+
+        Vector3 acceleration = accelerationDirection * 350;
+        float headMass = 2;
+        bool canStop = false;
+        while(timeCounter < deathEffectDuration && !canStop)
+        {
+            acceleration += Vector3.down * headMass * 10;
+            head.position += acceleration * Time.deltaTime * Time.deltaTime;
+            if ((head.position - floorPosition).y < 0)
+            {
+                head.position = new Vector3(head.position.x, floorPosition.y, head.position.z);
+                canStop = true;
+            }
+            timeCounter += Time.deltaTime;
+            yield return null;
+        }
     }
 
     #endregion
@@ -591,9 +534,9 @@ public class PlayerCharacter : Character
 
     private void ManaRegeneration()
     {
-        CurrentMana += manaRegenPerSecond * Time.deltaTime;
-        if (CurrentMana > maxMana)
-            CurrentMana = maxMana;
+        CurrentMana += playerStats.manaRegenPerSecond * Time.deltaTime;
+        if (CurrentMana > playerStats.maxMana)
+            CurrentMana = playerStats.maxMana;
     }
 
     private bool ManaAvailable()
@@ -604,6 +547,17 @@ public class PlayerCharacter : Character
     private void SpendMana(float amount)
     {
         CurrentMana -= amount;
+    }
+
+    #endregion
+
+    #region Misc
+
+    public void InspectWeapon()
+    {
+        if (!CanAttack)
+            return;
+        StartCoroutine(AttackRoutine(0, 0, animator.inspectAnimationDuration, null, animator.InspectWeapon, 0, 0,false));
     }
 
     #endregion

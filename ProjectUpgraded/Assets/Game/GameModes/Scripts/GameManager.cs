@@ -9,13 +9,18 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
 
 
-
     public LanguagePack languagePack;
     [HideInInspector]public Settings settings;
     public PostProcessVolume[] postProcess;
+    public RenderResolutionScaler resolutionScaler;
     public AudioMixer sfxMixer;
     public AudioMixer musicMixer;
     public bool IsPaused { get; set; }
+
+    [HideInInspector] public HUD hud;
+    [HideInInspector] public MobileInputController mobileInputController;
+
+
     void Awake()
     {
         if (instance == null)
@@ -37,6 +42,7 @@ public class GameManager : MonoBehaviour {
 
     public void PauseGame()
     {
+        ShowHideInterface(false);
         Utility.EnableCursor();
         IsPaused = true;
         Time.timeScale = 0;
@@ -44,6 +50,7 @@ public class GameManager : MonoBehaviour {
 
     public void UnpauseGame()
     {
+        ShowHideInterface(true);
         IsPaused = false;
         Time.timeScale = 1;
     }
@@ -62,5 +69,13 @@ public class GameManager : MonoBehaviour {
     public AudioMixerGroup GetMusicMixerGroup()
     {
         return musicMixer.FindMatchingGroups("Master")[0];
+    }
+
+    private void ShowHideInterface(bool val)
+    {
+        if (hud)
+            hud.ShowHide(val);
+        if (mobileInputController)
+            mobileInputController.ShowHide(val);
     }
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Lvl Bldr Lite Piece DB
+  m_EditorClassIdentifier: Assembly-CSharp::LvlBldrLitePieceDB
+  pieces:
+  - {fileID: 11400000, guid: 38ada0a9110a69844ab67c9067032bc9, type: 2}
+  - {fileID: 11400000, guid: 9b9ed61b191d73944b2a62499d7bcc9f, type: 2}
+  - {fileID: 11400000, guid: 7a18e43414c40f347a842b88e3a77eee, type: 2}
+  - {fileID: 11400000, guid: 86bde5db68ecb6e48ac8e2fabefa1c1e, type: 2}
+  - {fileID: 11400000, guid: 5bf0e70e4b0a0e64c95e3126006bbeb6, type: 2}

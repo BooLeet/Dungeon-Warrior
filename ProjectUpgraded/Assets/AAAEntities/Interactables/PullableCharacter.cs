@@ -11,14 +11,14 @@ public class PullableCharacter : Pullable
         return "";
     }
 
-    public override void Interact(Character interactingCharacter)
+    protected override void _Interact(Character interactingCharacter)
     {
         
     }
 
     protected override void MoveObject(Vector3 direction)
     {
-        character.controller.Move(direction);
+        character.JustMove(direction);
     }
 
     protected override void OnPullEnd(Character interactingCharacter) { }

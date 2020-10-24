@@ -33,10 +33,12 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("menuSettingsAudioSFX", "SFX Volume"),
         new KeyValue("menuSettingsAudioMusic", "Music Volume"),
 
-        new KeyValue("menuSettingsGraphicsMotionBlur", "Motion Blur"),
+        new KeyValue("menuSettingsGraphicsBloom", "Bloom"),
         new KeyValue("menuSettingsGraphicsGrain", "Film Grain"),
         new KeyValue("menuSettingsGraphicsAO", "Ambient Occlusion"),
         new KeyValue("menuSettingsGraphicsShadows", "Shadow Quality"),
+        new KeyValue("menuSettingsGraphicsResolution", "Render Resolution"),
+        new KeyValue("menuSettingsGraphicsFPS", "Framerate Limit"),
 
         new KeyValue("menuSettingsGameSensitivity", "Mouse Sensitivity"),
         new KeyValue("menuSettingsGameReticule", "Show Reticule"),
@@ -44,6 +46,7 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("menuQuitMessage", "Do you really want to quit?"),
 
         new KeyValue("menuResume", "Resume"),
+        new KeyValue("menuRetry", "Retry"),
         new KeyValue("menuQuitToMain", "Main Menu"),
 
         new KeyValue("Yes", "Yes"),
@@ -53,6 +56,8 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("cancel", "Cancel"),
         new KeyValue("back", "Back"),
 
+        new KeyValue("dead", "DEAD!"),
+
         new KeyValue("doorOpen", "Open"),
         new KeyValue("doorClose", "Close"),
         new KeyValue("doorKeyRequired", "Key Required"),
@@ -61,6 +66,10 @@ public class LanguagePack : ScriptableObject {
 
         new KeyValue("lootPickUp", "Pick Up"),
         new KeyValue("lootAlreadyHave", "You already have this item"),
+        new KeyValue("healthPotionUse", "Quaff"),
+
+        new KeyValue("record", "Record"),
+        new KeyValue("delveRoomsReached", "Rooms Reached"),
     };
     //public System.Tuple<string, string>[] keyValues = {new System.Tuple<string, string>("doorOpen", "Open") };
     //[Header("Interactions")]

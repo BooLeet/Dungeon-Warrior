@@ -5,18 +5,18 @@ using UnityEngine;
 public class HealthPotion : Interactable
 {
     public float healAmount = 40;
-    public AudioClip quafSound;
+    public AudioClip quaffSound;
 
     public override string GetPrompt(Character interactingCharacter)
     {
         return GameManager.instance.languagePack.GetString("healthPotionUse");
     }
 
-    public override void Interact(Character interactingCharacter)
+    protected override void _Interact(Character interactingCharacter)
     {
         interactingCharacter.GiveHealth(healAmount);
-        if(quafSound)
-            Utility.PlayAudioClipAtPoint(quafSound, ButtonPosition, null, 1, GameManager.instance.GetSfxMixerGroup());
+        if(quaffSound)
+            Utility.PlayAudioClipAtPoint(quaffSound, ButtonPosition, null, 1, GameManager.instance.GetSfxMixerGroup());
         RemoveInteractable();
     }
 }
