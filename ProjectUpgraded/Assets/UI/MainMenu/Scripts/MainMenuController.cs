@@ -54,7 +54,7 @@ public class MainMenuController : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(GameManager.instance.settings.keyMapSettings.GetKeyCode("back")))
             GoBack();
     }
 
