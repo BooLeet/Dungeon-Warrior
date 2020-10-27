@@ -73,7 +73,7 @@ public static class Utility{
     {
         List<KeyCode> result = new List<KeyCode>();
         foreach(KeyCode key in System.Enum.GetValues(typeof(KeyCode)))
-            if (Input.GetKey(key))
+            if (Input.GetKeyDown(key))
                 result.Add(key);
         return result;
     }

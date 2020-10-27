@@ -18,7 +18,7 @@ MonoBehaviour:
   moveSpeed: 12
   jumpVelocity: 8
   gravityModifier: 3
-  startingMeleeWeapon: {fileID: 11400000, guid: 322f7a64f1b2e094f90827f071a4a796,
+  startingMeleeWeapon: {fileID: 11400000, guid: a36a6905300469f42acfe7c8347e366e,
     type: 2}
   targetingRaycastRange: 25
   interactionDistance: 5

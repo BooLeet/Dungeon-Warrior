@@ -42,6 +42,7 @@ public class LanguagePack : ScriptableObject {
 
         new KeyValue("menuSettingsGameSensitivity", "Mouse Sensitivity"),
         new KeyValue("menuSettingsGameReticule", "Show Reticule"),
+        new KeyValue("menuSettingsKeyChange", "Enter the desired key:"),
 
         new KeyValue("menuQuitMessage", "Do you really want to quit?"),
 
@@ -70,6 +71,20 @@ public class LanguagePack : ScriptableObject {
 
         new KeyValue("record", "Record"),
         new KeyValue("delveRoomsReached", "Rooms Reached"),
+
+        new KeyValue("keyForward", "Move Forward"),
+        new KeyValue("keyBackwards", "Move Backwards"),
+        new KeyValue("keyStrafeRight", "Move Right"),
+        new KeyValue("keyStrafeLeft", "Move Left"),
+
+        new KeyValue("keyPrimaryAttack", "Primary Attack"),
+        new KeyValue("keySecondaryAttack", "Secondary Attack"),
+        new KeyValue("keyInteract", "Interact"),
+        new KeyValue("keyJump", "Jump"),
+        new KeyValue("keyDash", "Dash"),
+        new KeyValue("keyForcePush", "Force Push"),
+        new KeyValue("keyInspect", "Inspect Weapons"),
+        new KeyValue("keyBack", "Back"),
     };
     //public System.Tuple<string, string>[] keyValues = {new System.Tuple<string, string>("doorOpen", "Open") };
     //[Header("Interactions")]

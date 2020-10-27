@@ -12,6 +12,13 @@ public class KeycodeTest : MonoBehaviour
 
     void Update()
     {
-        Utility.GetPressedKeycodes();
+        List<KeyCode> keyCodes = Utility.GetPressedKeycodes();
+        if (keyCodes.Count == 0)
+            return;
+
+        string message = "";
+        foreach (KeyCode key in keyCodes)
+            message += key.ToString() + " ";
+        Debug.Log(message);
     }
 }

@@ -114,7 +114,7 @@ namespace AI_FSM
         {
             if (character.DistanceToEnemy <= character.aiStats.attackDistance + epsilon)
             {
-                //aICharacter.StopMovement();
+                character.StopMovement();
 
                 if (!character.EnemyIsVisible) // If enemy went out of sight
                     return new FindEnemyState();

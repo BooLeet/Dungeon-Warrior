@@ -5,6 +5,7 @@ using UnityEngine.Audio;
 using UnityEngine.Rendering.PostProcessing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 [System.Serializable]
 public class Settings
@@ -27,7 +28,7 @@ public class Settings
 
         public static GraphicSettings Default()
         {
-            return new GraphicSettings(false, false, false, 1,2);
+            return new GraphicSettings(true, true, true, 4,2);
         }
 
         public int GetTargetFrameRate()
@@ -87,22 +88,91 @@ public class Settings
         }
     }
 
+    [System.Serializable]
+    public struct KeyMapSettings
+    {
+        [System.Serializable]
+        public struct Key
+        {
+            public string name;
+            public KeyCode keyCode;
+            public string localizationKey;
+
+            public Key(string name, string localizationKey, KeyCode keyCode)
+            {
+                this.name = name;
+                this.localizationKey = localizationKey;
+                this.keyCode = keyCode;
+            }
+        }
+
+        public List<Key> keys;
+
+        /// <summary>
+        /// Returns a list of default keys
+        /// </summary>
+        /// <returns></returns>
+        public static List<Key> GetDefaultKeys()
+        {
+            List<Key> keyInfo = new List<Key>();
+            keyInfo.Add(new Key("forward", "keyForward", KeyCode.W));
+            keyInfo.Add(new Key("backwards", "keyBackwards", KeyCode.S));
+            keyInfo.Add(new Key("strafeRight", "keyStrafeRight", KeyCode.D));
+            keyInfo.Add(new Key("strafeLeft", "keyStrafeLeft", KeyCode.A));
+
+            keyInfo.Add(new Key("primaryAttack", "keyPrimaryAttack", KeyCode.Mouse0));
+            keyInfo.Add(new Key("secondaryAttack", "keySecondaryAttack", KeyCode.Mouse1));
+            keyInfo.Add(new Key("interact", "keyInteract", KeyCode.E));
+            keyInfo.Add(new Key("jump", "keyJump", KeyCode.Space));
+            keyInfo.Add(new Key("dash", "keyDash", KeyCode.LeftShift));
+            keyInfo.Add(new Key("forcePush", "keyForcePush", KeyCode.V));
+            keyInfo.Add(new Key("inspect", "keyInspect", KeyCode.F));
+
+            keyInfo.Add(new Key("back", "keyBack", KeyCode.Escape));
+
+            return keyInfo;
+        }
+
+        public KeyMapSettings(List<Key> keys)
+        {
+            this.keys = keys;
+        }
+
+        public static KeyMapSettings Default()
+        {
+            return new KeyMapSettings(GetDefaultKeys());
+        }
+
+        public KeyCode GetKeyCode(string keyName)
+        {
+            if (keys == null)
+                return KeyCode.None;
+
+            return keys.Find(key => key.name == keyName).keyCode;
+        }
+
+    }
+
+
     public GraphicSettings graphicSettings;
     public AudioSettings audioSettings;
     public GameSettings gameSettings;
+    public KeyMapSettings keyMapSettings;
 
     public Settings()
     {
         graphicSettings = GraphicSettings.Default();
         audioSettings = AudioSettings.Default();
         gameSettings = GameSettings.Default();
+        keyMapSettings = KeyMapSettings.Default();
     }
 
-    public Settings(GraphicSettings graphicSettings, AudioSettings audioSettings, GameSettings gameSettings)
+    public Settings(GraphicSettings graphicSettings, AudioSettings audioSettings, GameSettings gameSettings, KeyMapSettings keyMapSettings)
     {
         this.graphicSettings = graphicSettings;
         this.audioSettings = audioSettings;
         this.gameSettings = gameSettings;
+        this.keyMapSettings = keyMapSettings;
     }
 
     public void ApplyAllSettings()
@@ -110,6 +180,7 @@ public class Settings
         ApplyGraphicsSettings();
         ApplyAudioSettings();
         ApplyGameplaySettings();
+        ApplyKeyMapSettings();
     }
 
     public void ApplyGraphicsSettings(PostProcessVolume[] volumes, RenderResolutionScaler resolutionScaler)
@@ -154,6 +225,11 @@ public class Settings
     }
 
     public void ApplyGameplaySettings()
+    {
+
+    }
+
+    public void ApplyKeyMapSettings()
     {
 
     }

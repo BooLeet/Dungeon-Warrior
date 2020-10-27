@@ -153,6 +153,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slider
       objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 8675552845028676401}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.b
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.r
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.g
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7869344645664727654, guid: 6da3dcca5e70a3447a35e9ec573a529c,
+        type: 3}
+      propertyPath: m_Colors.m_PressedColor.b
+      value: 0.6431373
+      objectReference: {fileID: 0}
     - target: {fileID: 7869344645664727655, guid: 6da3dcca5e70a3447a35e9ec573a529c,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -186,7 +186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &580358790325454643
 Transform:
   m_ObjectHideFlags: 0
@@ -1192,6 +1192,8 @@ MonoBehaviour:
   deathTrigger: Death
   meleeWeaponSlot: {fileID: 6083562393870258049}
   weaponScale: 10
+  inspectWeaponTrigger: Inspect
+  inspectAnimationDuration: 4.5
 --- !u!114 &1016228930228646329
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -21,9 +21,13 @@ public class SettingsMenuController : MonoBehaviour
     public Slider sensitivytySlider;
     public Toggle reticuleToggle;
 
+    [Header("Key bindings")]
+    public SettingKeyMapper keyMapper;
+
+
     void Start()
     {
-        
+        keyMapper.FillKeyButtons();
     }
 
     #region Graphics
@@ -75,6 +79,23 @@ public class SettingsMenuController : MonoBehaviour
         SaveSettings();
     }
     #endregion
+
+    #region Key
+
+    public void ApplyKeySettings()
+    {
+        GameManager.instance.settings.keyMapSettings = new Settings.KeyMapSettings(keyMapper.GetMappedKeys());
+        GameManager.instance.settings.ApplyKeyMapSettings();
+        SaveSettings();
+        keyMapper.FillKeyButtons();
+    }
+
+    #endregion
+
+    public void GoBack()
+    {
+        mainMenuController.GoBack();
+    }
 
     public void SaveSettings()
     {

@@ -43,6 +43,7 @@ public class MainMenuController : MonoBehaviour
     public MainMenuState settingsAudio;
     public MainMenuState settingsGameplay;
     public MainMenuState settingsKeys;
+    public MainMenuState settingsKeyChangeWindow;
 
 
     void Start()
@@ -151,6 +152,11 @@ public class MainMenuController : MonoBehaviour
     public void ShowSettingsKeys()
     {
         PushState(settingsKeys);
+    }
+
+    public void ShowKeyChangeWindow()
+    {
+        PushState(settingsKeyChangeWindow);
     }
 
     // Game Over

@@ -123,6 +123,11 @@ public abstract class Character : Entity {
             LookAt(positionToFollow);
     }
 
+    public void StopMovement()
+    {
+        navAgent.ResetPath();
+    }
+
     private void SetDestination(Vector3 position, float stoppingDistance)
     {
         ChangeMovementMode(true);
