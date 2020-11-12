@@ -42,6 +42,11 @@ public class PlayerCharacterAnimator : CharacterAnimator
     public float weaponScale = 10;
 
     [Header("Equipment")]
+    public string equipMeleeTrigger = "EquipMelee";
+    public float equipMeleeModelSwitchDelay = 1 / 3f;
+    public float equipMeleeDuration = 11 / 6f;
+    private MeleeWeapon meleeWeapon;
+    [Space]
     public string inspectWeaponTrigger = "Inspect";
     public float inspectAnimationDuration = 2.5f;
 
@@ -155,6 +160,15 @@ public class PlayerCharacterAnimator : CharacterAnimator
     #endregion
 
     #region Equipment
+
+    /// <summary>
+    /// Plays melee weapon equip animation
+    /// </summary>
+    public void EquipMeleeAnimation()
+    {
+        animator.SetTrigger(equipMeleeTrigger);
+    }
+
     /// <summary>
     /// Deletes all objects from the melee weapon slot
     /// </summary>
@@ -164,13 +178,18 @@ public class PlayerCharacterAnimator : CharacterAnimator
             Destroy(meleeWeaponSlot.GetChild(0).gameObject);    
     }
 
+    public void SetMeleeWeapon(MeleeWeapon meleeWeapon)
+    {
+        this.meleeWeapon = meleeWeapon;
+    }
+
     /// <summary>
-    /// Equips a melee weapon
+    /// Instantiates a melee weapon model
     /// </summary>
-    public void EquipMeleeWeapon(MeleeWeapon weapon)
+    public void InstantiateMeleeWeapon()
     {
         ClearMeleeWeapon();
-        Instantiate(weapon.prefab, meleeWeaponSlot).transform.localScale = Vector3.one * weaponScale;
+        Instantiate(meleeWeapon.prefab, meleeWeaponSlot).transform.localScale = Vector3.one * weaponScale;
     }
 
     /// <summary>

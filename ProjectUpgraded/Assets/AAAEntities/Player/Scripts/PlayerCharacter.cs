@@ -78,7 +78,8 @@ public class PlayerCharacter : Character
         currentMovementState = new DirectMovementState();
         currentCombatState = new BasicAttackState();
 
-        animator.EquipMeleeWeapon(playerStats.startingMeleeWeapon);
+        animator.SetMeleeWeapon(playerStats.startingMeleeWeapon);
+        animator.InstantiateMeleeWeapon();
     }
 
     protected override void ControllerUpdate()
@@ -440,6 +441,13 @@ public class PlayerCharacter : Character
                    select x.interactable;
 
         CurrentInteractable = temp.Count() > 0 ? temp.First() : null;
+    }
+
+    public void EquipMeleeWeapon(MeleeWeapon weapon)
+    {
+        animator.SetMeleeWeapon(weapon);
+        StartCoroutine(AttackRoutine(animator.equipMeleeModelSwitchDelay, animator.equipMeleeModelSwitchDelay,animator.equipMeleeDuration,
+                                     null,animator.EquipMeleeAnimation,0,0,false));
     }
 
     #endregion
