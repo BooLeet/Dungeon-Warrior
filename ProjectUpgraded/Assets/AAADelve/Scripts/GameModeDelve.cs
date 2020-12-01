@@ -52,6 +52,10 @@ public class GameModeDelve : GameMode
 
     private int currentEnemyLevel = 0;
 
+    [Header("PlayerUpgrades")]
+    public MeleeWeapon[] meleeUpgrades;
+    private int meleeUpgradeCounter = 0;
+
     protected override void AwakeFunction()
     {
         if (instance == null)
@@ -169,11 +173,16 @@ public class GameModeDelve : GameMode
     #endregion
 
     #region Score
-    private void AddScore(int rawScore, Vector3 position, HUD_ScorePopup.Scale scale)
+    private void AddRawScore(int rawScore, Vector3 position, HUD_ScorePopup.Scale scale)
+    {
+        GameManager.instance.hud.ScorePopup(rawScore, position, scale);
+        Score += rawScore;
+    }
+
+    private void AddMultipliedScore(int rawScore, Vector3 position, HUD_ScorePopup.Scale scale)
     {
         int score = rawScore * ScoreMultiplier;
-        GameManager.instance.hud.ScorePopup(score, position, scale);
-        Score += score;
+        AddRawScore(score, position, scale);
         scoreMultiplierMeterTickDownCounter = scoreMultiplierMeterTickDownDelay;
         ScoreMultiplierIncreace(rawScore);
     }
@@ -194,7 +203,6 @@ public class GameModeDelve : GameMode
             }
         }
     }
-
 
     private void ScoreMultiplierTickDown()
     {
@@ -233,11 +241,35 @@ public class GameModeDelve : GameMode
 
     #endregion
 
+    #region Player Upgrades
+
+    public MeleeWeapon GetMeleeUpgrade()
+    {
+        if (meleeUpgradeCounter >= meleeUpgrades.Length)
+            return null;
+        return meleeUpgrades[meleeUpgradeCounter];
+    }
+
+    public int GetMeleeUpgradeCost()
+    {
+        return 1337;
+    }
+
+    public void OnMeleeUpgrade(Vector3 popupPosition)
+    {
+        AddRawScore(-GetMeleeUpgradeCost(), popupPosition, HUD_ScorePopup.Scale.Mid);
+        ++meleeUpgradeCounter;
+    }
+
+    #endregion
+
     private void IncreaceEnemyLevel()
     {
         ++currentEnemyLevel;
         Debug.Log("Current enemy level: " + currentEnemyLevel);
     }
+
+    #region Overrides
 
     public override void OnAIKilled(AICharacter character)
     {
@@ -245,7 +277,7 @@ public class GameModeDelve : GameMode
         AIDirector.TokenType tokenType = character.aiStats.attackTokenType;
         if (tokenType == AIDirector.TokenType.HeavyMelee || tokenType == AIDirector.TokenType.HeavyRange)
             scoreToAdd = scoreBigMonster;
-        AddScore(scoreToAdd, character.Position, HUD_ScorePopup.Scale.Big);
+        AddMultipliedScore(scoreToAdd, character.Position, HUD_ScorePopup.Scale.Big);
     }
 
     public override void OnInteraction(Interactable interactable)
@@ -258,7 +290,7 @@ public class GameModeDelve : GameMode
 
         if (scoreToAdd < 0)
             return;
-        AddScore(scoreToAdd, interactable.ButtonPosition, HUD_ScorePopup.Scale.Small);
+        AddMultipliedScore(scoreToAdd, interactable.ButtonPosition, HUD_ScorePopup.Scale.Small);
     }
 
     public override void OnPlayerDamaged(float rawDamage)
@@ -282,11 +314,13 @@ public class GameModeDelve : GameMode
 
     public override void OnSpikesKill(DeadlySpikes spikes)
     {
-        AddScore(spikeKill, spikes.Position + Vector3.up, HUD_ScorePopup.Scale.Mid);
+        AddMultipliedScore(spikeKill, spikes.Position + Vector3.up, HUD_ScorePopup.Scale.Mid);
     }
 
     public override int GetEnemyLevel()
     {
         return currentEnemyLevel;
     }
+
+    #endregion
 }

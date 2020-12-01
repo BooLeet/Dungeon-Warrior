@@ -169,7 +169,7 @@ public class PlayerCharacter : Character
         attackSource = animator.meleeAttack.damageSource;
 
         StartCoroutine(AttackRoutine(animator.meleeAttack.attackDamageDelay, animator.meleeAttack.attackDuration, animator.meleeAttack.attackAnimationDuration,
-            playerStats.meleeAttackFunction, animator.MeleeAttack, playerStats.meleeAttackDamage, playerStats.meleeAttackHeadKnockBackAngle));
+            playerStats.meleeAttackFunction, animator.MeleeAttack, GetMeleeDamage(), playerStats.meleeAttackHeadKnockBackAngle));
     }
 
     public bool CanUseRevolver()
@@ -184,7 +184,7 @@ public class PlayerCharacter : Character
         
         SpendMana(playerStats.forcePushManaCost);
         StartCoroutine(AttackRoutine(animator.forcePush.attackDamageDelay, animator.forcePush.attackDuration, animator.forcePush.attackAnimationDuration,
-            playerStats.forcePushAttackFunction, animator.ForcePush, playerStats.meleeAttackDamage, playerStats.meleeAttackHeadKnockBackAngle));
+            playerStats.forcePushAttackFunction, animator.ForcePush, 0, playerStats.meleeAttackHeadKnockBackAngle));
     }
 
     private IEnumerator AttackRoutine(float attackDamageDelay, float attackDuration, float attackAnimationDuration, AttackFunction attackFunction, Utility.VoidFunction animationCall, float damage, float headKnockBackAngle = 0,bool shakeScreen = true)
@@ -294,12 +294,12 @@ public class PlayerCharacter : Character
     public void StingAttackEnd()
     {
         attackSource = animator.meleeAttack.damageSource;
-        float damageMultiplier = Mathf.Lerp(playerStats.stingAttackDmgMultiplier.x, playerStats.stingAttackDmgMultiplier.y, SpecialAttackMeter);
-        SpecialAttackMeter = 0;
 
         StartCoroutine(AttackRoutine(animator.stingEndAnimation.attackDamageDelay, animator.stingEndAnimation.attackDuration,
-            animator.stingEndAnimation.attackAnimationDuration, playerStats.stingAttackFunction, animator.StingAttackEnd, playerStats.meleeAttackDamage * damageMultiplier,
+            animator.stingEndAnimation.attackAnimationDuration, playerStats.stingAttackFunction, animator.StingAttackEnd, GetStingDamage(),
             playerStats.meleeAttackHeadKnockBackAngle));
+
+        SpecialAttackMeter = 0;
     }
     #endregion
 
@@ -313,12 +313,12 @@ public class PlayerCharacter : Character
     public void RevolverAttackEnd()
     {
         attackSource = animator.revolverAttack.damageSource;
-        float damageMultiplier = Mathf.Lerp(playerStats.revolverAttackDmgMultiplier.x, playerStats.revolverAttackDmgMultiplier.y, SpecialAttackMeter);
-        SpecialAttackMeter = 0;
         inventory.SpendResource(playerStats.revolverResource);
 
         StartCoroutine(AttackRoutine(animator.revolverAttack.attackDamageDelay, animator.revolverAttack.attackDuration, animator.revolverAttack.attackAnimationDuration,
-            playerStats.revolverAttackFunction, animator.RevolverAttackEnd, playerStats.revolverAttackDamage * damageMultiplier, playerStats.revolverAttackHeadKnockBackAngle));
+            playerStats.revolverAttackFunction, animator.RevolverAttackEnd,GetRangedDamage(), playerStats.revolverAttackHeadKnockBackAngle));
+
+        SpecialAttackMeter = 0;
     }
     #endregion
 
@@ -332,10 +332,9 @@ public class PlayerCharacter : Character
     public void SpinAttackEnd()
     {
         attackSource = animator.meleeAttack.damageSource;
-        float damageMultiplier = Mathf.Lerp(playerStats.spinAttackDmgMultiplier.x, playerStats.spinAttackDmgMultiplier.y, SpecialAttackMeter);
-        SpecialAttackMeter = 0;
 
-        StartCoroutine(SpinAttackRoutine(playerStats.meleeAttackDamage * damageMultiplier));
+        StartCoroutine(SpinAttackRoutine(GetSpinDamage()));
+        SpecialAttackMeter = 0;
     }
 
     private IEnumerator SpinAttackRoutine(float damage, float enertiaEffectDuration = 0.5f, float enertiaEffectMagnitude = 30f)
@@ -509,6 +508,7 @@ public class PlayerCharacter : Character
         GameMode.gameModeInstance.OnPlayerDeath();
 
         Utility.EnableCursor();
+        input.ShowHide(false);
         menuController.EnableMenu();
         menuController.ShowGameOver();
     }
@@ -555,6 +555,33 @@ public class PlayerCharacter : Character
     private void SpendMana(float amount)
     {
         CurrentMana -= amount;
+    }
+
+    #endregion
+
+    #region Stats
+
+    public float GetMeleeDamage()
+    {
+        return playerStats.meleeAttackDamage;
+    }
+
+    public float GetSpinDamage()
+    {
+        float damageMultiplier = Mathf.Lerp(playerStats.spinAttackDmgMultiplier.x, playerStats.spinAttackDmgMultiplier.y, SpecialAttackMeter);
+        return GetMeleeDamage() * damageMultiplier;
+    }
+
+    public float GetStingDamage()
+    {
+        float damageMultiplier = Mathf.Lerp(playerStats.stingAttackDmgMultiplier.x, playerStats.stingAttackDmgMultiplier.y, SpecialAttackMeter);
+        return GetMeleeDamage() * damageMultiplier;
+    }
+
+    public float GetRangedDamage()
+    {
+        float damageMultiplier = Mathf.Lerp(playerStats.revolverAttackDmgMultiplier.x, playerStats.revolverAttackDmgMultiplier.y, SpecialAttackMeter);
+        return playerStats.revolverAttackDamage * damageMultiplier;
     }
 
     #endregion

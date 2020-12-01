@@ -13,22 +13,23 @@ public class Settings
     [System.Serializable]
     public struct GraphicSettings
     {
-        public bool bloom, filmGrain, AO;
+        public bool bloom, filmGrain, AO, motionBlur;
         public byte renderResolution;//1 = 1/8, 2 = 1/4, 3 = 1/2, 4 = 1
         public byte frameRate;//1 = 30,2 = 60,3 = uncapped
 
-        public GraphicSettings(bool bloom, bool filmGrain, bool AO, byte renderResolution, byte frameRate)
+        public GraphicSettings(bool bloom, bool filmGrain, bool AO, bool motionBlur, byte renderResolution, byte frameRate)
         {
             this.bloom = bloom;
             this.filmGrain = filmGrain;
             this.AO = AO;
+            this.motionBlur = motionBlur;
             this.renderResolution = (byte)Mathf.Clamp(renderResolution, 1, 4);
             this.frameRate = (byte)Mathf.Clamp(frameRate, 1, 3);
         }
 
         public static GraphicSettings Default()
         {
-            return new GraphicSettings(true, true, true, 4,2);
+            return new GraphicSettings(true, true, false, true, 4,2);
         }
 
         public int GetTargetFrameRate()
@@ -37,7 +38,7 @@ public class Settings
             {
                 case 1: return 30;
                 case 2: return 60;
-                default: return 120;
+                default: return 0;
             }
         }
 
@@ -190,18 +191,21 @@ public class Settings
             Bloom bloom = null;
             Grain filmGrain = null;
             AmbientOcclusion AO = null;
-
+            MotionBlur motionBlur = null;
             
             volume.profile.TryGetSettings<Bloom>(out bloom);
             volume.profile.TryGetSettings<Grain>(out filmGrain);
             volume.profile.TryGetSettings<AmbientOcclusion>(out AO);
+            volume.profile.TryGetSettings<MotionBlur>(out motionBlur);
 
-            if(bloom)
+            if (bloom)
                 bloom.enabled.value = graphicSettings.bloom;
             if(filmGrain)
                 filmGrain.enabled.value = graphicSettings.filmGrain;
             if(AO)
                 AO.enabled.value = graphicSettings.AO;
+            if (motionBlur)
+                motionBlur.enabled.value = graphicSettings.motionBlur;
         }
 
         resolutionScaler.ApplyResolutionScale(graphicSettings.GetResolutionScale());

@@ -23,6 +23,8 @@ public class KeyboardInput : PlayerInput {
 
     private Settings.KeyMapSettings keySettings;
 
+    public override void ShowHide(bool val) {}
+
     public override void UpdateValues()
     {
         keySettings = GameManager.instance.settings.keyMapSettings;

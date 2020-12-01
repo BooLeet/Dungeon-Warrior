@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeWeaponPickup : Interactable
+public abstract class MeleeWeaponPickup : Interactable
 {
-    public MeleeWeapon meleeWeapon;
+    private MeleeWeapon meleeWeapon;
 
-    private void Start()
+    protected void SetWeapon(MeleeWeapon meleeWeapon)
     {
+        this.meleeWeapon = meleeWeapon;
+
         int childCount = transform.childCount;
         for (int i = 0; i < childCount; ++i)
             DestroyImmediate(transform.GetChild(0).gameObject);
@@ -15,17 +17,18 @@ public class MeleeWeaponPickup : Interactable
         Instantiate(meleeWeapon.prefab, transform);
     }
 
-    public override string GetPrompt(Character interactingCharacter)
-    {
-        return "[PLACEHOLDER]";
-    }
+    protected abstract bool InteractThreshold(PlayerCharacter player);
+
+    protected abstract void OnEquip(PlayerCharacter player);
 
     protected override void _Interact(Character interactingCharacter)
     {
         PlayerCharacter player = interactingCharacter as PlayerCharacter;
-        if (!player)
+        if (!player || !InteractThreshold(player))
             return;
+
         player.EquipMeleeWeapon(meleeWeapon);
+        OnEquip(player);
         RemoveInteractable();
     }
 }

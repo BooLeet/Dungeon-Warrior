@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class MobileInputController : PlayerInput
 {
     private float cameraSensitivity = 100;
-
+    //public Canvas canvas;
+    //[Space]
     public MobileInputJoy moveJoystick;
     public MobileInputJoy primaryJoystick;
     public MobileInputJoy secondaryJoystick;
@@ -83,7 +84,7 @@ public class MobileInputController : PlayerInput
             }
     }
 
-    public void ShowHide(bool val)
+    public override void ShowHide(bool val)
     {
         gameObject.SetActive(val);
     }

@@ -48,5 +48,7 @@ public abstract class PlayerInput : MonoBehaviour
 
     public abstract void UpdateValues();
 
+    public abstract void ShowHide(bool val);
+
 }
 

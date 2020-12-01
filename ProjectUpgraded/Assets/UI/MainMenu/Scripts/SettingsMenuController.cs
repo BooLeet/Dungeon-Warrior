@@ -10,6 +10,7 @@ public class SettingsMenuController : MonoBehaviour
     public Toggle bloomToggle;
     public Toggle filmGrainToggle;
     public Toggle AO_Toggle;
+    public Toggle motionBlurToggle;
     public Slider resolutionSlider;
     public Slider frameRateSlider;
 
@@ -37,13 +38,14 @@ public class SettingsMenuController : MonoBehaviour
         bloomToggle.isOn = graphicSettings.bloom;
         filmGrainToggle.isOn = graphicSettings.filmGrain;
         AO_Toggle.isOn = graphicSettings.AO;
+        motionBlurToggle.isOn = graphicSettings.motionBlur;
         resolutionSlider.value = graphicSettings.renderResolution;
         frameRateSlider.value = graphicSettings.frameRate;
     }
 
     public void ApplyGraphicsSettings()
     {
-        GameManager.instance.settings.graphicSettings = new Settings.GraphicSettings(bloomToggle.isOn, filmGrainToggle.isOn, AO_Toggle.isOn, (byte)resolutionSlider.value, (byte)frameRateSlider.value);
+        GameManager.instance.settings.graphicSettings = new Settings.GraphicSettings(bloomToggle.isOn, filmGrainToggle.isOn, AO_Toggle.isOn, motionBlurToggle.isOn, (byte)resolutionSlider.value, (byte)frameRateSlider.value);
         GameManager.instance.settings.ApplyGraphicsSettings();
         SaveSettings();
     }

@@ -36,6 +36,7 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("menuSettingsGraphicsBloom", "Bloom"),
         new KeyValue("menuSettingsGraphicsGrain", "Film Grain"),
         new KeyValue("menuSettingsGraphicsAO", "Ambient Occlusion"),
+        new KeyValue("menuSettingsGraphicsMotionBlur", "Motion Blur"),
         new KeyValue("menuSettingsGraphicsShadows", "Shadow Quality"),
         new KeyValue("menuSettingsGraphicsResolution", "Render Resolution"),
         new KeyValue("menuSettingsGraphicsFPS", "Framerate Limit"),
@@ -85,6 +86,10 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("keyForcePush", "Force Push"),
         new KeyValue("keyInspect", "Inspect Weapons"),
         new KeyValue("keyBack", "Back"),
+
+        new KeyValue("pts", "PTS"),
+        new KeyValue("buy", "Buy"),
+        new KeyValue("tooExpensive", "Too Expensive"),
     };
     //public System.Tuple<string, string>[] keyValues = {new System.Tuple<string, string>("doorOpen", "Open") };
     //[Header("Interactions")]

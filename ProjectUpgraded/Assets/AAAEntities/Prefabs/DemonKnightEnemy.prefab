@@ -76,11 +76,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   verticalTargetingOffset: 1.75
-  maxHealth: 125
   selfDamageMultiplier: 0.2
   head: {fileID: 4888866760253142}
   center: {x: 0, y: 1, z: 0}
-  radius: 0.5
+  radius: 1
   height: 2
   aiStats: {fileID: 11400000, guid: 001fe2c0792d78340877823d48e89053, type: 2}
   characterAnimator: {fileID: 3114962090902921753}

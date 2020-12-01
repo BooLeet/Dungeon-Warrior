@@ -812,6 +812,15 @@ MonoBehaviour:
   scoreMultiplierStep: 300
   scoreMultiplierMeterTickDown: 60
   scoreMultiplierMeterTickDownDelay: 2
+  meleeUpgrades:
+  - {fileID: 11400000, guid: 400b8fb101179eb48ab2166b2680c545, type: 2}
+  - {fileID: 11400000, guid: 866eb3bfdbba27344a120b7c2472c8e6, type: 2}
+  - {fileID: 11400000, guid: 8e8a5c7799118734983c8e5ce11efa6c, type: 2}
+  - {fileID: 11400000, guid: 322f7a64f1b2e094f90827f071a4a796, type: 2}
+  - {fileID: 11400000, guid: c7558015baff7b5488fb721900c926ad, type: 2}
+  - {fileID: 11400000, guid: 633057ddd1e3e944a99e061d46670620, type: 2}
+  - {fileID: 11400000, guid: d7012440f4ccd3f48b134144fd673c82, type: 2}
+  - {fileID: 11400000, guid: a36a6905300469f42acfe7c8347e366e, type: 2}
 --- !u!4 &1026122795
 Transform:
   m_ObjectHideFlags: 0
