@@ -43,8 +43,10 @@ public class KeyboardInput : PlayerInput {
         KeyCode inspectKey = keySettings.GetKeyCode("inspect");
 
         KeyCode backKey = keySettings.GetKeyCode("back");
+        KeyCode hideUIKey = keySettings.GetKeyCode("hideUI");
 
         pause = Input.GetKeyDown(backKey);
+        hideUI = Input.GetKeyDown(hideUIKey);
 
         StickyInput(ref attackTimeCounter, ref attack, attackHold? Input.GetKey(attackKey) : Input.GetKeyDown(attackKey));
         StickyInput(ref forcePushTimeCounter, ref forcePush, Input.GetKeyDown(forcePushKey));

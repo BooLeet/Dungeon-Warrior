@@ -1197,6 +1197,11 @@ PrefabInstance:
       propertyPath: m_MaxValue
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2748700677988699719, guid: 035bc65ee8ddf384baced36e27f50faa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3194820274181683726, guid: 035bc65ee8ddf384baced36e27f50faa,
         type: 3}
       propertyPath: m_Name

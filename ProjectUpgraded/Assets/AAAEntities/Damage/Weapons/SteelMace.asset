@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: SteelMace
   m_EditorClassIdentifier: 
   prefab: {fileID: 752421158421146330, guid: ad93a56b5575f0f4c8e75312ffd26bf2, type: 3}
+  price: 20000
+  baseDamageMultiplier: 1.5
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

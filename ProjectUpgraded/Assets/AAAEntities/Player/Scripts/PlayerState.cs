@@ -35,7 +35,7 @@ namespace PlayerFSM
 
         public override PlayerState Transition(PlayerCharacter player)
         {
-            if (player.input.Dash && player.DashMeter >= 0)
+            if (player.input.Dash && player.DashMeter >= 1)
                 return new DashState();
             return null;
         }
@@ -71,7 +71,7 @@ namespace PlayerFSM
             Vector3 forward = player.transform.forward;
             dashDirection = forward * moveInput.y + player.transform.right * moveInput.x;
 
-            currentDashDuration = player.playerStats.dashDuration * player.DashMeter;
+            currentDashDuration = player.playerStats.dashDuration;
 
             PlayerCamera.Recoil(20);
             PlayerCamera.ScreenShake(currentDashDuration);

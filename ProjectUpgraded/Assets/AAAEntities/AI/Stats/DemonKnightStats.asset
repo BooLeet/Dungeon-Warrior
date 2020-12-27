@@ -21,7 +21,7 @@ MonoBehaviour:
   attackFunction: {fileID: 11400000, guid: 898745e5aace9344781e64e363c646b0, type: 2}
   attackTokenType: 2
   attackDamage: 20
-  attackDistance: 4
+  attackDistance: 3
   attackTokenCooldownTime: 1
   attacksPerToken: 1
   visibilityDistance: 100
@@ -29,6 +29,6 @@ MonoBehaviour:
   rapidMovementSpeed: 0.5
   canBeStunned: 0
   pushDurationMultiplier: 0.35
-  healthPerLevel: 10
+  healthPerLevel: 0
   moveSpeedPerLevel: 0.5
   attackDamagePerLevel: 5

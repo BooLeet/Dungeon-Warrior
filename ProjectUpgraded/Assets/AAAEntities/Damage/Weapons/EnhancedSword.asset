@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: EnhancedSword
   m_EditorClassIdentifier: 
   prefab: {fileID: 6560859904328808500, guid: 85d318a07b8227b4e9eaf9f50ce2903f, type: 3}
+  price: 40000
+  baseDamageMultiplier: 2
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

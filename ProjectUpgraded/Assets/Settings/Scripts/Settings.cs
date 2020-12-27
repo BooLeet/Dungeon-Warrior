@@ -128,8 +128,9 @@ public class Settings
             keyInfo.Add(new Key("dash", "keyDash", KeyCode.LeftShift));
             keyInfo.Add(new Key("forcePush", "keyForcePush", KeyCode.V));
             keyInfo.Add(new Key("inspect", "keyInspect", KeyCode.F));
+            keyInfo.Add(new Key("hideUI", "keyHideUI", KeyCode.U));
 
-            keyInfo.Add(new Key("back", "keyBack", KeyCode.Escape));
+            keyInfo.Add(new Key("back", "keyBack", KeyCode.Tab));
 
             return keyInfo;
         }
@@ -207,8 +208,8 @@ public class Settings
             if (motionBlur)
                 motionBlur.enabled.value = graphicSettings.motionBlur;
         }
-
-        resolutionScaler.ApplyResolutionScale(graphicSettings.GetResolutionScale());
+        if(resolutionScaler.enabled)
+            resolutionScaler.ApplyResolutionScale(graphicSettings.GetResolutionScale());
     }
 
     public void ApplyGraphicsSettings()

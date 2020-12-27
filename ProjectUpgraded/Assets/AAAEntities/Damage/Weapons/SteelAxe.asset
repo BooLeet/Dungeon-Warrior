@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: SteelAxe
   m_EditorClassIdentifier: 
   prefab: {fileID: 5317843077790125702, guid: 1c3a74382efffc240b2e49616d0d51ee, type: 3}
+  price: 0
+  baseDamageMultiplier: 1
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

@@ -16,11 +16,11 @@ MonoBehaviour:
   merchantRoom: {fileID: 11400000, guid: f838f2e5b8f54e845893ebff10c27deb, type: 2}
   easy:
   - {fileID: 11400000, guid: e2134228615bc974da40d75e867e94a6, type: 2}
-  - {fileID: 11400000, guid: 771fe081b47992a48b2fd744df80a40f, type: 2}
+  - {fileID: 11400000, guid: 177363a8fb8fb0746a4e244da14fec5d, type: 2}
   - {fileID: 11400000, guid: 11f69ac63f6ef9a40bff603b634c8aed, type: 2}
   medium:
   - {fileID: 11400000, guid: f6910546e871071428b4f333226e40e6, type: 2}
-  - {fileID: 11400000, guid: 177363a8fb8fb0746a4e244da14fec5d, type: 2}
+  - {fileID: 11400000, guid: 771fe081b47992a48b2fd744df80a40f, type: 2}
   - {fileID: 11400000, guid: d0d48917cf40e1740bfdb51086669650, type: 2}
   hard:
   - {fileID: 11400000, guid: d0d48917cf40e1740bfdb51086669650, type: 2}

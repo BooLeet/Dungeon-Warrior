@@ -10,7 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51815bf3053382446b9abdf3091e2b4a, type: 3}
-  m_Name: DlvCasEz02
+  m_Name: DlvCasEz01
   m_EditorClassIdentifier: 
-  roomType: 2
-  room: {fileID: 6902842700386931329, guid: 78ad56b35a696cc40a071b151c34dc7d, type: 3}
+  room: {fileID: 6902842700386931329, guid: 293febb46a392544b860518f50700337, type: 3}

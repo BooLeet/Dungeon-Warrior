@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: SteelSword
   m_EditorClassIdentifier: 
   prefab: {fileID: 3225714631501965399, guid: ba0c06ec657984e45a5d4bd93a7f9b14, type: 3}
+  price: 5000
+  baseDamageMultiplier: 1.25
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

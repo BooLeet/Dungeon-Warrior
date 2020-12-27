@@ -6,4 +6,5 @@ using UnityEngine;
 public class Weapon : ScriptableObject
 {
     public GameObject prefab;
+    public int price;
 }

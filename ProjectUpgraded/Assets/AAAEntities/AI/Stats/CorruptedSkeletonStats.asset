@@ -29,6 +29,6 @@ MonoBehaviour:
   rapidMovementSpeed: 0
   canBeStunned: 1
   pushDurationMultiplier: 1
-  healthPerLevel: 10
+  healthPerLevel: 0
   moveSpeedPerLevel: 0.5
   attackDamagePerLevel: 5

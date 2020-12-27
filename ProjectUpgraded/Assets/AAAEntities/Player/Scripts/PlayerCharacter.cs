@@ -9,6 +9,7 @@ public class PlayerCharacter : Character
     public static PlayerCharacter instance;
     [Header("Stats")]
     public PlayerStats playerStats;
+    private PlayerEquipment equipment;
 
     [Header("References")]
     public PlayerInput input;
@@ -78,6 +79,9 @@ public class PlayerCharacter : Character
         currentMovementState = new DirectMovementState();
         currentCombatState = new BasicAttackState();
 
+        equipment = new PlayerEquipment();
+        equipment.SetMeleeWeapon(playerStats.startingMeleeWeapon);
+
         animator.SetMeleeWeapon(playerStats.startingMeleeWeapon);
         animator.InstantiateMeleeWeapon();
     }
@@ -91,6 +95,7 @@ public class PlayerCharacter : Character
             return;
         input.UpdateValues();
         PauseHandler();
+        UIHidingHandler();
 
         ManaRegeneration();
         UpdateInteractable();
@@ -447,6 +452,8 @@ public class PlayerCharacter : Character
         animator.SetMeleeWeapon(weapon);
         StartCoroutine(AttackRoutine(animator.equipMeleeModelSwitchDelay, animator.equipMeleeModelSwitchDelay,animator.equipMeleeDuration,
                                      null,animator.EquipMeleeAnimation,0,0,false));
+
+        equipment.SetMeleeWeapon(weapon);
     }
 
     #endregion
@@ -563,19 +570,19 @@ public class PlayerCharacter : Character
 
     public float GetMeleeDamage()
     {
-        return playerStats.meleeAttackDamage;
+        return playerStats.meleeAttackDamage * equipment.GetMeleeWeapon().baseDamageMultiplier;
     }
 
     public float GetSpinDamage()
     {
         float damageMultiplier = Mathf.Lerp(playerStats.spinAttackDmgMultiplier.x, playerStats.spinAttackDmgMultiplier.y, SpecialAttackMeter);
-        return GetMeleeDamage() * damageMultiplier;
+        return GetMeleeDamage() * damageMultiplier * equipment.GetMeleeWeapon().spinDamageMultiplier;
     }
 
     public float GetStingDamage()
     {
         float damageMultiplier = Mathf.Lerp(playerStats.stingAttackDmgMultiplier.x, playerStats.stingAttackDmgMultiplier.y, SpecialAttackMeter);
-        return GetMeleeDamage() * damageMultiplier;
+        return GetMeleeDamage() * damageMultiplier * equipment.GetMeleeWeapon().stingDamageMultiplier;
     }
 
     public float GetRangedDamage()
@@ -593,6 +600,12 @@ public class PlayerCharacter : Character
         if (!CanAttack)
             return;
         StartCoroutine(AttackRoutine(0, 0, animator.inspectAnimationDuration, null, animator.InspectWeapon, 0, 0,false));
+    }
+
+    private void UIHidingHandler()
+    {
+        if (input.HideUI)
+            hud.ChangeUIVisibility();
     }
 
     #endregion

@@ -45,12 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7585ced847b17804cb6b8a17697bfc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  languagePack: {fileID: 11400000, guid: 7c69bbc16826f26489d0b8f709e253f1, type: 2}
+  languagePack: {fileID: 11400000, guid: 2495115adea50e8489e4276c5649b93d, type: 2}
   settings:
     graphicSettings:
       bloom: 0
       filmGrain: 0
       AO: 0
+      motionBlur: 1
       renderResolution: 4
       frameRate: 2
     audioSettings:

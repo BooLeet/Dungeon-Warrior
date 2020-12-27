@@ -12,6 +12,9 @@ public class HUD : MonoBehaviour {
     public GameObject scorePopupPrefab;
     public Canvas canvas;
 
+    private bool uiVisibleInGameplay = true;
+    private bool showHUD = true;
+
     private void Start()
     {
         GameManager.instance.hud = this;
@@ -19,8 +22,19 @@ public class HUD : MonoBehaviour {
 
     public void ShowHide(bool val)
     {
+        showHUD = val;
+        EnableCanvas(showHUD && uiVisibleInGameplay);
+    }
+
+    public void ChangeUIVisibility()
+    {
+        uiVisibleInGameplay = !uiVisibleInGameplay;
+        EnableCanvas(showHUD && uiVisibleInGameplay);
+    }
+
+    private void EnableCanvas(bool val)
+    {
         canvas.enabled = val;
-        //gameObject.SetActive(val);
     }
 
     private void Update()

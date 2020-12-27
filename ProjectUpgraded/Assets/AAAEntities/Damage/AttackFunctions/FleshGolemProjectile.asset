@@ -23,5 +23,5 @@ MonoBehaviour:
     onHit:
       onHitFunctors: []
     model: {fileID: 1664740601458906, guid: d1689e07f8fd85b498e1b4d8137005b8, type: 3}
-    hitEffect: {fileID: 1706171305083330, guid: 7e3155a23b72bf544b1bff76ff88d9b1,
+    hitEffect: {fileID: 1706171305083330, guid: 29418aeef5e6ab84fa214773a5d45a71,
       type: 3}

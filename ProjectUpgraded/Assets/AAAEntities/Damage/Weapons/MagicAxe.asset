@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: MagicAxe
   m_EditorClassIdentifier: 
   prefab: {fileID: 1285622349717985280, guid: db5417e12f6af21418ad4d977f7010d1, type: 3}
+  price: 60000
+  baseDamageMultiplier: 2.5
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

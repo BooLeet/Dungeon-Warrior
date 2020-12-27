@@ -51,6 +51,6 @@ MonoBehaviour:
     type: 2}
   forcePushManaCost: 40
   dashSpeed: 45
-  dashDuration: 0.3
-  dashCapacity: 1.25
+  dashDuration: 0.15
+  dashCapacity: 1
   dashCooldownTime: 0.75

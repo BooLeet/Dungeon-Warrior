@@ -35,8 +35,8 @@ public class Projectile : MonoBehaviour {
         float raycastDistance = info.speed * Time.deltaTime;
         currentLifeTime += Time.deltaTime;
 
-        //if (Physics.Raycast(new Ray(transform.position, transform.forward), out hitInfo, raycastDistance))
-        if (Physics.SphereCast(transform.position, info.radius, transform.forward, out hitInfo, raycastDistance))
+        if (Physics.Raycast(new Ray(transform.position, transform.forward), out hitInfo, raycastDistance))
+        //if (Physics.SphereCast(transform.position, info.radius, transform.forward, out hitInfo, raycastDistance))
         {
             if(info.hitEffect)
                 Instantiate(info.hitEffect, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));

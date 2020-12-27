@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class GameModeDelve : GameMode
 {
@@ -19,6 +21,18 @@ public class GameModeDelve : GameMode
     public DelveRoomSet roomSet;
     private DelveRoom previousDelveRoom;
 
+    [System.Serializable]
+    public class DelveScoreContainer
+    {
+        public int score;
+
+        public DelveScoreContainer(int score = 0)
+        {
+            this.score = score;
+        }
+    }
+
+
     [Header("Room Director")]
     [Range(0, 10)]
     public int difficultyEasyCount = 3;
@@ -26,6 +40,7 @@ public class GameModeDelve : GameMode
     public int difficultyMediumCount = 2;
     [Range(0, 10)]
     public int difficultyHardCount = 1;
+    public bool showMerchantRoom = false;
 
     private int roomCountCyclical = 0;
     public int RoomNumber { get; private set; }
@@ -109,26 +124,20 @@ public class GameModeDelve : GameMode
 
 
         ++roomCountCyclical;
-        if (roomCountCyclical > merchantThreshold + 1)
-            roomCountCyclical = 1;
-        
-        if (roomCountCyclical > merchantThreshold)
+        if (roomCountCyclical > merchantThreshold + (showMerchantRoom? 1 : 0))
         {
-            result = roomSet.merchantRoom;
+            roomCountCyclical = 1;
             IncreaceEnemyLevel();
         }
+        
+        if (roomCountCyclical > merchantThreshold)
+            result = roomSet.merchantRoom;
         else if(roomCountCyclical > hardThreshold)
-        {
             result = GetRandomRoom(roomSet.hard, previousDelveRoom);
-        }
         else if (roomCountCyclical > mediumThreshold)
-        {
             result = GetRandomRoom(roomSet.medium, previousDelveRoom);
-        }
         else
-        {
             result = GetRandomRoom(roomSet.easy, previousDelveRoom);
-        }
 
         previousDelveRoom = result;
         return result;
@@ -230,19 +239,50 @@ public class GameModeDelve : GameMode
         scoreMultiplierMeterTickDownCounter -= Time.deltaTime;
     }
 
+    public static void SaveScore(DelveScoreContainer delveSaveScore)
+    {
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/Score.dat";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        formatter.Serialize(stream, delveSaveScore);
+        stream.Close();
+    }
+
+    public static DelveScoreContainer LoadScore()
+    {
+        string path = Application.persistentDataPath + "/Score.dat";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            DelveScoreContainer score = formatter.Deserialize(stream) as DelveScoreContainer;
+            stream.Close();
+            return score;
+        }
+
+        return new DelveScoreContainer();
+    }
+
     #endregion
 
     #region Game Over
-    private int GetRecordRoomNumber()
+    private int GetRecordScoreNumber()
     {
-        return 1337;
+        DelveScoreContainer loadedScore = LoadScore();
+        if (loadedScore.score < Score)
+        {
+            SaveScore(new DelveScoreContainer(Score));
+            return Score;
+        }
+        return loadedScore.score;
     }
 
 
     #endregion
 
     #region Player Upgrades
-
     public MeleeWeapon GetMeleeUpgrade()
     {
         if (meleeUpgradeCounter >= meleeUpgrades.Length)
@@ -252,7 +292,7 @@ public class GameModeDelve : GameMode
 
     public int GetMeleeUpgradeCost()
     {
-        return 1337;
+        return GetMeleeUpgrade().price;
     }
 
     public void OnMeleeUpgrade(Vector3 popupPosition)
@@ -308,8 +348,8 @@ public class GameModeDelve : GameMode
     public override string GetGameOverText()
     {
         LanguagePack languagePack = GameManager.instance.languagePack;
-        return languagePack.GetString("delveRoomsReached") + ": " + RoomNumber.ToString() + "\n" +
-               languagePack.GetString("record") + ": " + GetRecordRoomNumber().ToString();
+        return languagePack.GetString("currentScore") + ": " + Score.ToString() + "\n" +
+               languagePack.GetString("recordScore") + ": " + GetRecordScoreNumber().ToString();
     }
 
     public override void OnSpikesKill(DeadlySpikes spikes)

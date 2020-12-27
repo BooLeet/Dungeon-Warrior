@@ -804,6 +804,7 @@ MonoBehaviour:
   difficultyEasyCount: 3
   difficultyMediumCount: 2
   difficultyHardCount: 1
+  showMerchantRoom: 0
   scoreRegularMonster: 50
   scoreBigMonster: 100
   scorePotion: 20
@@ -875,6 +876,10 @@ PrefabInstance:
     - target: {fileID: 1058531237787678, guid: 5009b1ac54549d2409f2feb357e4a90c, type: 3}
       propertyPath: m_Name
       value: FPSCounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058531237787678, guid: 5009b1ac54549d2409f2feb357e4a90c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4051526845500320, guid: 5009b1ac54549d2409f2feb357e4a90c, type: 3}
       propertyPath: m_LocalPosition.x

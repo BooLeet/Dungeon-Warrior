@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: MagicMace
   m_EditorClassIdentifier: 
   prefab: {fileID: 1715655801052347792, guid: 3d7f43ef128c23143bc7da92b5f9a57c, type: 3}
+  price: 80000
+  baseDamageMultiplier: 3
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

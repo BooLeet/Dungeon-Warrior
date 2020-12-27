@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: EnhancedMace
   m_EditorClassIdentifier: 
   prefab: {fileID: 3067515737532172413, guid: fe128dc75ec6d6a45b1d3b998a1a835f, type: 3}
+  price: 50000
+  baseDamageMultiplier: 2.25
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

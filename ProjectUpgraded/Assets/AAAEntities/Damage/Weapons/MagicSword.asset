@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: MagicSword
   m_EditorClassIdentifier: 
   prefab: {fileID: 6022519222373998009, guid: 7aa77fb7a228f5446a22752332e17f23, type: 3}
+  price: 70000
+  baseDamageMultiplier: 2.75
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

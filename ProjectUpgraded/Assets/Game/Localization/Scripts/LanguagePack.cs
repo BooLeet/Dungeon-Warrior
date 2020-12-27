@@ -70,8 +70,8 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("lootAlreadyHave", "You already have this item"),
         new KeyValue("healthPotionUse", "Quaff"),
 
-        new KeyValue("record", "Record"),
-        new KeyValue("delveRoomsReached", "Rooms Reached"),
+        new KeyValue("recordScore", "Record Score"),
+        new KeyValue("currentScore", "Current Score"),
 
         new KeyValue("keyForward", "Move Forward"),
         new KeyValue("keyBackwards", "Move Backwards"),
@@ -86,10 +86,19 @@ public class LanguagePack : ScriptableObject {
         new KeyValue("keyForcePush", "Force Push"),
         new KeyValue("keyInspect", "Inspect Weapons"),
         new KeyValue("keyBack", "Back"),
+        new KeyValue("keyHideUI", "Hide HUD"),
+        new KeyValue("keyLMB", "LMB"),
+        new KeyValue("keyRMB", "RMB"),
+        new KeyValue("keyMMB", "MMB"),
 
         new KeyValue("pts", "PTS"),
         new KeyValue("buy", "Buy"),
         new KeyValue("tooExpensive", "Too Expensive"),
+
+        new KeyValue("tutorial", "Tutorial"),
+        new KeyValue("stingAttack", "Sting Attack"),
+        new KeyValue("spinAttack", "Spin Attack"),
+        new KeyValue("revolverAttack", "Revolver Attack"),
     };
     //public System.Tuple<string, string>[] keyValues = {new System.Tuple<string, string>("doorOpen", "Open") };
     //[Header("Interactions")]
