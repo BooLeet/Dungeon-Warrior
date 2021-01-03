@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a4c6ba0c7101284e866d934b88df7da, type: 3}
+  m_Name: Shack
+  m_EditorClassIdentifier: 
+  pieces:
+  - {fileID: 11400000, guid: d95c4b50c4a0ba2499e941ac33635ab2, type: 2}
+  - {fileID: 11400000, guid: 31a273baebf8bc94cbd7e5ce947c5fd7, type: 2}
+  - {fileID: 11400000, guid: 5e7d088ec7beb26479dc677b53b78c50, type: 2}
+  - {fileID: 11400000, guid: e3a8ba5490d994344949202174226222, type: 2}
+  - {fileID: 11400000, guid: a63aca025d76dec40812164456090124, type: 2}
+  - {fileID: 11400000, guid: f1939882e72c75d448919dff95b90a1d, type: 2}
+  - {fileID: 11400000, guid: 50b6034e35d97094da48b0156b0907c6, type: 2}
+  - {fileID: 11400000, guid: 60a60e48d0de78f41a5730734c0c8e8f, type: 2}
+  - {fileID: 11400000, guid: f87b2ad4f6c025247ae45eac83159f81, type: 2}

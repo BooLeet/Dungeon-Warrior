@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdbad2fbce79da4fbd248c9fd51823e, type: 3}
+  m_Name: FleshGolemProjectile
+  m_EditorClassIdentifier: 
+  numberOfProjectiles: 1
+  spreadAngle: 10
+  info:
+    name: Projectile
+    radius: 0.2
+    speed: 20
+    lifeTime: 5
+    maxPenetrations: 0
+    onHit:
+      onHitFunctors: []
+    model: {fileID: 1664740601458906, guid: d1689e07f8fd85b498e1b4d8137005b8, type: 3}
+    hitEffect: {fileID: 1706171305083330, guid: 29418aeef5e6ab84fa214773a5d45a71,
+      type: 3}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fdbad2fbce79da4fbd248c9fd51823e, type: 3}
+  m_Name: RV_Attack
+  m_EditorClassIdentifier: 
+  numberOfProjectiles: 1
+  spreadAngle: 0.25
+  info:
+    name: Projectile
+    radius: 0.1
+    speed: 200
+    lifeTime: 1
+    maxPenetrations: 0
+    onHit:
+      onHitFunctors: []
+    model: {fileID: 1869306367562306, guid: 6d9bc338c3cb191418aa887fe22f0adf, type: 2}
+    hitEffect: {fileID: 0}

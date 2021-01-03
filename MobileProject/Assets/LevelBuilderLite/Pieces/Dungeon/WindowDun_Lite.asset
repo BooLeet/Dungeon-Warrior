@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2869966c241bb48498effb2bdc955145, type: 3}
+  m_Name: WindowDun_Lite
+  m_EditorClassIdentifier: 
+  mapColor: {r: 0, g: 0.5803922, b: 1, a: 1}
+  floorMaterial: {fileID: 0}
+  ceilingMaterial: {fileID: 0}
+  mainMaterial: {fileID: 2100000, guid: 71ef933f23721c246801339e20e5e7ed, type: 2}
+  type: 1
+  props:
+  - prefab: {fileID: 3872670800643696670, guid: d16c5703c4ff6bd4ab6738f616c779b9,
+      type: 3}
+    probability: 1

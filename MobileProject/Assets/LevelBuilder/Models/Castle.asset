@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a4c6ba0c7101284e866d934b88df7da, type: 3}
+  m_Name: Castle
+  m_EditorClassIdentifier: 
+  pieces:
+  - {fileID: 11400000, guid: 575a55339d56b6446896da15c8c8fc9b, type: 2}
+  - {fileID: 11400000, guid: a756bc0ab618d5749ace4cc2ad56c824, type: 2}
+  - {fileID: 11400000, guid: 82b08544ec75a024581bc3f89d85ba94, type: 2}
+  - {fileID: 11400000, guid: c8344105bd3cac448a4730300c149818, type: 2}
+  - {fileID: 11400000, guid: 0754fc9f503a29b418f8b01062ce32c4, type: 2}
+  - {fileID: 11400000, guid: f1939882e72c75d448919dff95b90a1d, type: 2}
+  - {fileID: 11400000, guid: 50b6034e35d97094da48b0156b0907c6, type: 2}
+  - {fileID: 11400000, guid: 8b33d8d23aca0ef4da1f51226159d00e, type: 2}
+  - {fileID: 11400000, guid: 615bf98400d4a24458111179e47f57a0, type: 2}

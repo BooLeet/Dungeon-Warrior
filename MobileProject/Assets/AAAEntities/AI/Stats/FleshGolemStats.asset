@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930b82cf2a69819498c2c5f11cd9711b, type: 3}
+  m_Name: FleshGolemStats
+  m_EditorClassIdentifier: 
+  maxHealth: 120
+  alliance: 0
+  selfDamageMultiplier: 0
+  moveSpeed: 2
+  jumpVelocity: 12
+  gravityModifier: 3
+  attackFunction: {fileID: 11400000, guid: 72dd325673027574f832a196eaeca55e, type: 2}
+  attackTokenType: 3
+  attackDamage: 30
+  attackDistance: 40
+  attackTokenCooldownTime: 1.5
+  attacksPerToken: 1
+  visibilityDistance: 100
+  visibilityAngle: 180
+  rapidMovementSpeed: 0
+  canBeStunned: 0
+  pushDurationMultiplier: 1
+  healthPerLevel: 0
+  moveSpeedPerLevel: 0.5
+  attackDamagePerLevel: 1

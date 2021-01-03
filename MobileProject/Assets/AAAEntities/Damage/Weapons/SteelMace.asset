@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdae815488982dd42a0c64e059623a1d, type: 3}
+  m_Name: SteelMace
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 752421158421146330, guid: ad93a56b5575f0f4c8e75312ffd26bf2, type: 3}
+  price: 20000
+  baseDamageMultiplier: 1.5
+  stingDamageMultiplier: 1
+  spinDamageMultiplier: 1

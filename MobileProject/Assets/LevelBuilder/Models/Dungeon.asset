@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a4c6ba0c7101284e866d934b88df7da, type: 3}
+  m_Name: Dungeon
+  m_EditorClassIdentifier: 
+  pieces:
+  - {fileID: 11400000, guid: a7ad75c43fcab6541a2b7c99acadf4c1, type: 2}
+  - {fileID: 11400000, guid: 1b95128a56eaf464b8f663a1f0ea6814, type: 2}
+  - {fileID: 11400000, guid: ad9a4bbd0fc68c84aa88660f95b386c5, type: 2}
+  - {fileID: 11400000, guid: b3db69defb55aa04f8e4da18b7c9bf8d, type: 2}
+  - {fileID: 11400000, guid: 046799e006d979c4e9464f963c91254e, type: 2}
+  - {fileID: 11400000, guid: 284b629bd5558ce4abd1f3ae2b2906cf, type: 2}
+  - {fileID: 11400000, guid: c46bdb872207dbd4a8845f530c2858e3, type: 2}
