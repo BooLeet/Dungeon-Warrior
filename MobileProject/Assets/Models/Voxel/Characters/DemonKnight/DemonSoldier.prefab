@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994332749870589126}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: DamageEffectSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 6004978882948958262}
   - component: {fileID: 6013534401665757448}
   - component: {fileID: 5960431162063913022}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 5941309988093590658}
   - component: {fileID: 5960267811119274686}
   - component: {fileID: 5960633947717868254}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: DemonSoldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,7 +240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994244616269645238}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994672588726246364}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: DamageSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 5993826153527274874}
   - component: {fileID: 6005316068319032946}
   - component: {fileID: 6013013727794868876}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +380,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994637826952256346}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   - component: {fileID: 5994139545527526614}
   - component: {fileID: 6004974122688342300}
   - component: {fileID: 6013239981200221874}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,7 +490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994541930957936790}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: LeftArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -522,7 +522,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994418340312884048}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -553,7 +553,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5993840454372000742}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Hand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -587,7 +587,7 @@ GameObject:
   - component: {fileID: 6005318070131578636}
   - component: {fileID: 6013501237083847182}
   - component: {fileID: 5959828140586175712}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5993818522521459484}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: UpperBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -709,7 +709,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5993899249688537790}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -744,7 +744,7 @@ GameObject:
   - component: {fileID: 6005245968468306236}
   - component: {fileID: 6013155196168677906}
   - component: {fileID: 5960536070835902508}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -833,7 +833,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994597330201055376}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: RightArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,7 +868,7 @@ GameObject:
   - component: {fileID: 6004968941104818798}
   - component: {fileID: 6013195760114845082}
   - component: {fileID: 5960675447815947918}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +960,7 @@ GameObject:
   - component: {fileID: 6005232939031370946}
   - component: {fileID: 6012771818779621842}
   - component: {fileID: 5959886865865134644}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1049,7 +1049,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5994713025092886998}
-  m_Layer: 11
+  m_Layer: 13
   m_Name: Forearm
   m_TagString: Untagged
   m_Icon: {fileID: 0}

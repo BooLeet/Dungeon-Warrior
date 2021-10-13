@@ -1933,7 +1933,7 @@ MonoBehaviour:
   image: {fileID: 6834210578798753607}
   lerpParameter: 10
   audioSource: {fileID: 6802635624055808399}
-  audioClip: {fileID: 0}
+  audioClip: {fileID: 8300000, guid: 66553ecdcfde07f468653c93822d5dd8, type: 3}
 --- !u!1 &6864845906647450309
 GameObject:
   m_ObjectHideFlags: 0

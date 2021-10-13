@@ -503,6 +503,11 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 8938808221887802369}
+    - target: {fileID: 2896765618714817892, guid: a646368a69b82274a8f30fe14d0f52f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3528593425290847248, guid: a646368a69b82274a8f30fe14d0f52f5,
         type: 3}
       propertyPath: m_Layer
@@ -603,6 +608,11 @@ PrefabInstance:
       propertyPath: meleeAttack.attackDamageDelay
       value: 0.16666667
       objectReference: {fileID: 0}
+    - target: {fileID: 6190639966206353333, guid: a646368a69b82274a8f30fe14d0f52f5,
+        type: 3}
+      propertyPath: cameraHolder
+      value: 
+      objectReference: {fileID: 8954556804307624871}
     - target: {fileID: 7922119670275143506, guid: a646368a69b82274a8f30fe14d0f52f5,
         type: 3}
       propertyPath: m_Layer
@@ -628,6 +638,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a5721d1ec8fa1842b73b0b688a4b274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &8954556804307624871 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2898201013294579132, guid: a646368a69b82274a8f30fe14d0f52f5,
+    type: 3}
+  m_PrefabInstance: {fileID: 6087885447521476123}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9069184177663231463 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2999596890590043132, guid: a646368a69b82274a8f30fe14d0f52f5,

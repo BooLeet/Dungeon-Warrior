@@ -50,6 +50,7 @@ public class PlayerCharacterAnimator : CharacterAnimator
     public string inspectWeaponTrigger = "Inspect";
     public float inspectAnimationDuration = 2.5f;
 
+
     #region Regular Melee Attack
     // Plays the melee attack animation
     public void MeleeAttack()

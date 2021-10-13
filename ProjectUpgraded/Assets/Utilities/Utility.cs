@@ -25,7 +25,7 @@ public static class Utility{
         return Vector3.Distance(pivotDirection, (objectPosition - pivotPosition).normalized) < directionalDistance;
     }
 
-    public static bool IsVisible(Vector3 from, GameObject obj, float maxDistance, float verticalOffset = 0, int layerMask = int.MaxValue)
+    public static bool IsVisible(Vector3 from, GameObject obj, float maxDistance, float verticalOffset, int layerMask = int.MaxValue)
     {
         Ray ray = new Ray(from, obj.transform.position + Vector3.up * verticalOffset - from);
         RaycastHit hit;
