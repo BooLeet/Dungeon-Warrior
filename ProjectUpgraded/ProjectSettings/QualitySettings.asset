@@ -27,7 +27,7 @@ QualitySettings:
     realtimeReflectionProbes: 1
     billboardsFaceCameraPosition: 1
     vSyncCount: 1
-    lodBias: 2
+    lodBias: 1
     maximumLODLevel: 0
     streamingMipmapsActive: 0
     streamingMipmapsAddAllCameras: 1
@@ -165,6 +165,7 @@ QualitySettings:
     Nintendo Switch: 0
     PS4: 0
     PSP2: 0
+    Server: 0
     Stadia: 0
     Standalone: 0
     Tizen: 0
